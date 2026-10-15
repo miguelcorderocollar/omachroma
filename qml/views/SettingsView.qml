@@ -117,6 +117,8 @@ Column {
     onChanged: { root.store.update("creativity", parseInt(value)) }
   }
   PanelSeparator { width: parent.width }
+  DataSettings { width: parent.width; store: root.store }
+  PanelSeparator { width: parent.width }
   PanelSectionHeader { text: "DEFAULT PROMPT" }
   PromptInput {
     id: prompt

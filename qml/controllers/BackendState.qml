@@ -19,6 +19,8 @@ Item {
   property var environmentKeys: ({})
   property string catalogWarning: ""
   property string dataPath: ""
+  property var storageInfo: null
+  readonly property bool dataBusy: dataProc.running
   property var keys: ({fal: false, openrouter: false})
   readonly property var effectiveConfig: Object.assign({}, config, {upscaler: keys.fal ? config.upscaler : "none"})
   property var lastJob: null
@@ -43,7 +45,7 @@ Item {
       modelConfig = data.modelConfig; providerDefaults = data.providerDefaults
       environmentKeys = data.environmentKeys; catalogWarning = data.catalogWarning || ""
       dataPath = data.dataPath || ""
-      if (data.refresh) message = data.refresh.updated + " metadata entries refreshed." + (data.refresh.warnings.length ? " " + data.refresh.warnings.join(" ") : "")
+      if (data.refresh) message = data.refresh.updated + " rates refreshed; " + (data.refresh.availabilityUpdated || 0) + " availability entries checked." + (data.refresh.warnings.length ? " " + data.refresh.warnings.join(" ") : "")
     } catch (e) { error = "Could not read Settings. Check the local config file." }
   }
   function load() {
@@ -97,6 +99,26 @@ Item {
     saveProc.command = ["python3", backend, "--refresh-prices"]
     message = "Refreshing provider metadata. Images and prompts are not sent."
     saveProc.running = true
+  }
+  function dataAction(open) {
+    if (dataProc.running || busy) return
+    dataProc.opening = open
+    dataProc.command = ["python3", backend, open ? "--open-data-folder" : "--storage-info"]
+    dataProc.running = true
+  }
+  Process {
+    id: dataProc
+    property bool opening: false
+    stdout: StdioCollector {
+      waitForEnd: true
+      onStreamFinished: {
+        if (!dataProc.opening && text.trim()) {
+          try { root.storageInfo = JSON.parse(text) }
+          catch (e) { root.error = "Could not read storage usage." }
+        }
+      }
+    }
+    onExited: { if (exitCode !== 0) root.error = "Could not inspect or open the app data folder." }
   }
   Process {
     id: loadProc

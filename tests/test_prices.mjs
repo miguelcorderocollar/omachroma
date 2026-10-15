@@ -18,3 +18,6 @@ assert.match(ctx.editingOptions([{...tokens, value:'test', label:'Test', availab
 console.log('Price checks passed: model dimensions, batch estimates, variable rates and partial accounting.');
 
 assert.ok(!ctx.priceText({upscaler: 'none'}, 'upscale', prices, 0, 0, 2, {}, 1).startsWith('\n'));
+
+assert.match(ctx.providerRate([{billable:'output_image', unit:'token', usd:.00003}]), /\$30\/output_image\/M tokens/);
+assert.notEqual(ctx.dollars(.000001), '$0');

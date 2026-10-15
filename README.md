@@ -152,7 +152,7 @@ Settings displays the active data directory. Files include:
 - `history/` and `current-job.json`: bounded metadata and preview selection.
   History includes source paths and outcomes, but no keys or prompts.
 
-Result folders accumulate until you remove them. **Clear** is not disk cleanup.
+Settings includes a bounded storage-usage check and an **Open app data folder** action for deliberate cleanup. The scan reads file sizes, not file contents. Result folders accumulate until you remove them. **Clear** is not disk cleanup.
 You can remove unneeded generated result folders using your file manager; missing
 results are identified in History. Back up images you want before doing so.
 Keys can be removed separately in Settings. An environment key stays active

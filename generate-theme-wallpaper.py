@@ -27,6 +27,8 @@ def main():
     ap.add_argument('--save-models', action='store_true')
     ap.add_argument('--refresh-prices', action='store_true')
     ap.add_argument('--doctor', action='store_true')
+    ap.add_argument('--storage-info', action='store_true')
+    ap.add_argument('--open-data-folder', action='store_true')
     ap.add_argument('--init-env', action='store_true')
     ap.add_argument('--list-themes', action='store_true')
     ap.add_argument('--list-backgrounds')
@@ -54,7 +56,11 @@ def main():
     ap.add_argument('--tag')  # retained for older callers; jobs always use unique IDs
     ap.add_argument('--seed', type=int)
     args = ap.parse_args()
-    if args.doctor:
+    if args.storage_info:
+        print(json.dumps(diagnostics.storage_usage()))
+    elif args.open_data_folder:
+        diagnostics.open_data_folder()
+    elif args.doctor:
         print(json.dumps(diagnostics.check()))
     elif args.history:
         print(json.dumps({'records': history.listing()}))

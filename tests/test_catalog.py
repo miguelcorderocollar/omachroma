@@ -9,7 +9,7 @@ from unittest.mock import patch
 
 PLUGIN = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PLUGIN))
-from backend import catalog, model_config, providers, storage, upscalers
+from backend import diagnostics, catalog, model_config, providers, storage, upscalers
 
 
 class CatalogTests(unittest.TestCase):
@@ -164,6 +164,29 @@ class CatalogTests(unittest.TestCase):
     def test_huge_numeric_price_rejected(self):
         value = self.custom(); value['models']['fal'][0]['price']['image'] = 10 ** 400
         with self.assertRaises(ValueError): catalog.save(value)
+
+    def test_openrouter_manual_prices_refresh_availability_only(self):
+        value = copy.deepcopy(model_config.EMPTY)
+        ident = catalog.MODELS['openrouter'][0]['value']
+        value['models']['openrouter'] = [{'value':ident,'label':'Manual model','adapter':'openrouter','resolutions':['1K'],'price':{'image':.99}}]
+        catalog.save(value)
+        with patch.object(storage, 'credentials', return_value={'OPENROUTER_API_KEY':'fixture'}), patch.object(catalog, 'metadata_request', return_value={'data':[{'id':ident}]}) as request:
+            result = catalog.refresh()
+        self.assertEqual(request.call_count,1)
+        self.assertEqual(result['updated'],0)
+        self.assertEqual(result['availabilityUpdated'],len(catalog.MODELS['openrouter']))
+        self.assertNotIn('rates',catalog.cache()[0]['openrouter'][ident])
+        self.assertEqual(storage.model_spec('openrouter',ident)['price'],{'image':.99})
+
+    def test_storage_usage_does_not_follow_external_symlinks(self):
+        (self.data / 'one').write_bytes(b'abc')
+        with tempfile.TemporaryDirectory() as external:
+            target = Path(external); (target / 'secret').write_bytes(b'x' * 1000)
+            (self.data / 'linked-folder').symlink_to(target, target_is_directory=True)
+            (self.data / 'linked-file').symlink_to(target / 'secret')
+            info = diagnostics.storage_usage()
+        self.assertEqual(info['bytes'], 3)
+        self.assertTrue(info['complete'])
 
     def test_launcher_cleanup_protects_user_entry(self):
         with patch.dict('os.environ', {'XDG_DATA_HOME': str(self.data)}):

@@ -135,16 +135,19 @@ def refresh():
     warnings = []
     stamp = datetime.now(timezone.utc).isoformat(timespec='seconds')
     started = time.monotonic()
-    updated = 0
+    updated = availability_updated = 0
+    changed = False
     def fetch(url, key, provider):
         remaining = 75 - (time.monotonic() - started)
         if remaining <= 0:
             raise ValueError('Metadata refresh reached its 75-second deadline.')
         return metadata_request(url, key, provider, min(8, remaining))
-    def remember(group, ident, data):
-        nonlocal updated
+    def remember(group, ident, data, rate=True):
+        nonlocal updated, availability_updated, changed
         result.setdefault(group, {})[ident] = {'checkedAt': stamp, **data}
-        updated += 1
+        changed = True
+        updated += int(rate)
+        availability_updated += int(group == 'openrouter')
     if keys.get('FAL_KEY'):
         try:
             editing = models('fal', include_hidden=True)
@@ -192,7 +195,11 @@ def refresh():
                     if not complete:
                         continue
                     old = previous.get('openrouter', {}).get(ident, {})
-                    remember('openrouter', ident, {**old, 'available': False, 'availabilityChecked': stamp})
+                    remember('openrouter', ident, {**old, 'available': False, 'availabilityChecked': stamp}, rate=False)
+                    continue
+                if ident in manual['openrouter']:
+                    old = previous.get('openrouter', {}).get(ident, {})
+                    remember('openrouter', ident, {**old, 'available': True, 'availabilityChecked': stamp}, rate=False)
                     continue
                 try:
                     info = fetch('https://openrouter.ai/api/v1/images/models/' + quote(ident, safe='/') + '/endpoints', keys['OPENROUTER_API_KEY'], 'openrouter')
@@ -209,6 +216,6 @@ def refresh():
             warnings.append('OpenRouter catalog could not refresh. Previous metadata remains active.')
     else:
         warnings.append('OpenRouter key missing; its rates were not refreshed.')
-    if updated:
+    if changed:
         storage.atomic_write(storage.DATA / 'catalog-cache.json', json.dumps(result, indent=2) + '\n')
-    return {'updated': updated, 'warnings': warnings}
+    return {'updated': updated, 'availabilityUpdated': availability_updated, 'warnings': warnings}

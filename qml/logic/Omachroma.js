@@ -1,6 +1,8 @@
 // Provider rates are dated snapshots. Output size, quality and input images can change the bill.
 function dollars(value) {
-  return "$" + Number(value).toFixed(4).replace(/0+$/, "").replace(/\.$/, "")
+  var amount = Number(value)
+  if (amount > 0 && amount < 0.0001) return "$" + amount.toPrecision(4)
+  return "$" + amount.toFixed(4).replace(/0+$/, "").replace(/\.$/, "")
 }
 
 function reportedCost(report) {
@@ -19,9 +21,10 @@ function reportedCost(report) {
 function providerRate(rates) {
   var groups = {}
   ;(rates || []).forEach(function(rate) {
-    var name = rate.billable + "/" + rate.unit + (rate.conditional ? " (conditional)" : "")
+    var tokens = rate.unit === "token" || rate.unit === "tokens"
+    var name = rate.billable + "/" + (tokens ? "M tokens" : rate.unit) + (rate.conditional ? " (conditional)" : "")
     if (!groups[name]) groups[name] = []
-    groups[name].push(Number(rate.usd))
+    groups[name].push(Number(rate.usd) * (tokens ? 1000000 : 1))
   })
   return Object.keys(groups).map(function(name) {
     var values = groups[name], low = Math.min.apply(null, values), high = Math.max.apply(null, values)

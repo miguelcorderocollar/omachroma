@@ -2,7 +2,7 @@
 
 Three sources remain distinct: bundled dated rates, cached provider metadata,
 and explicit user overrides. UI check dates belong to the displayed source.
-Refreshing never rewrites a manual rate.
+Refreshing never rewrites a manual rate. OpenRouter availability is still checked for manually priced models, but their endpoint rates are not fetched. The refresh result counts rates and availability separately.
 
 fal refresh uses the authenticated [pricing endpoint](https://fal.ai/docs/platform-apis/v1/models/pricing)
 for the configured editing/upscale endpoint IDs. It records the returned billing
