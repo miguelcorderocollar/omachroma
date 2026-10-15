@@ -1,7 +1,17 @@
-# Omachroma
+<h1 align="center">Omachroma</h1>
 
-Turn an image into wallpapers that fit your Omarchy themes. Use your own style
-references, generate a batch across several themes, or upscale an existing image.
+<p align="center">
+  <img src="assets/omachroma.svg" width="76" alt="Omachroma Tokyo Night landscape O logo">
+</p>
+
+<p align="center">
+  Turn an image into wallpapers that fit your Omarchy themes. Use your own style
+  references, generate a batch across several themes, or upscale an existing image.
+</p>
+
+<p align="center">
+  <img src="assets/omachroma-banner.jpg" alt="Abstract Tokyo Night landscape with blue, violet and amber light" width="100%">
+</p>
 
 ![Omachroma Generate view](preview.png)
 
@@ -11,8 +21,7 @@ keys. Generation and upscaling are paid provider operations.
 
 ## Install
 
-The public repository is being prepared. The command below becomes available
-when the first public release is published.
+Install the public repository directly from Omarchy:
 
 ```bash
 omarchy plugin add https://github.com/miguelcorderocollar/omachroma.git --enable
