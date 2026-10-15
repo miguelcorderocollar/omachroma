@@ -1,0 +1,30 @@
+import fs from 'node:fs';
+import vm from 'node:vm';
+import assert from 'node:assert/strict';
+const ctx = vm.createContext({});
+vm.runInContext(fs.readFileSync(new URL('../qml/logic/BatchPlan.js', import.meta.url), 'utf8'), ctx);
+const config = {provider: 'fal', model: 'fixture', res: '1K', quality: 'high', upscaler: 'none', upscaleFactor: 2};
+const references = {nord: {loaded: true, refs: ['nord.jpg'], swatches: ['#112233']}, other: {loaded: true, refs: ['other.jpg'], swatches: ['#445566']}};
+const jobs = ctx.jobs(['a.jpg', 'b.jpg', 'c.jpg'], ['nord', 'other'], references, config, 'Keep the source.');
+assert.equal(jobs.length, 6);
+assert.ok(jobs[0].argv[jobs[0].argv.indexOf('--prompt') + 1].includes('#112233'));
+assert.ok(!jobs[0].argv[jobs[0].argv.indexOf('--prompt') + 1].includes('#445566'));
+assert.equal(new Set(jobs.map(job => job.key)).size, 6);
+for (const job of jobs) {
+  assert.equal(job.argv[job.argv.indexOf('--source') + 1], job.sourcePath);
+  assert.equal(job.argv[job.argv.indexOf('--theme') + 1], job.theme);
+  assert.deepEqual(Array.from(job.argv.slice(job.argv.indexOf('--style-refs') + 1)), references[job.theme].refs);
+}
+const first = jobs[0];
+assert.notEqual(first.key, ctx.jobs(['a.jpg'], ['nord'], references, config, 'Different prompt.')[0].key);
+assert.notEqual(first.key, ctx.jobs(['a.jpg'], ['nord'], references, {...config, res: '2K'}, 'Keep the source.')[0].key);
+assert.notEqual(first.key, ctx.jobs(['a.jpg'], ['nord'], {...references, nord: {loaded: true, refs: ['new.jpg']}}, config, 'Keep the source.')[0].key);
+assert.equal(ctx.ready(['nord', 'other'], references, 13), '');
+assert.match(ctx.ready(['nord', 'other'], {...references, other: {loaded: false, refs: []}}, 13), /other/);
+assert.match(ctx.ready(['nord', 'other'], {...references, other: {loaded: true, refs: []}}, 13), /other/);
+assert.match(ctx.ready(['nord'], {nord: {loaded: true, refs: Array(14).fill('a.jpg')}}, 13), /Reduce/);
+assert.equal(ctx.status({status: 'done', theme: 'nord', installedTheme: 'nord', installedPath: '/saved.jpg'}), 'Saved');
+assert.equal(ctx.status({status: 'done', theme: 'nord', installedTheme: 'other', installedPath: '/saved.jpg'}), 'Ready to save');
+assert.equal(ctx.status({status: 'failed', resultPath: '/partial.png', theme: 'nord', installedTheme: 'nord', installedPath: '/saved.jpg'}), 'Partial · Saved');
+assert.equal(ctx.status({status: 'failed'}), 'Failed');
+console.log('Omachroma plan checks passed: rectangular batches, isolated references, new recipes, readiness and saved/partial states.');

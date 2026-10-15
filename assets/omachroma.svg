@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Omachroma</title>
+  <desc id="desc">A pixel-cut paper sheet with an O-shaped landscape, in ink, ivory and acid green.</desc>
+  <path fill="#111519" d="M24 4h80v8h12v12h8v80h-8v12h-12v8H24v-8H12v-12H4V24h8V12h12z"/>
+  <path fill="#b7e45b" d="M36 20h60v8h8v76H36z"/>
+  <path fill="#edf0dd" d="M24 28h56v8h8v8h8v68H24z"/>
+  <path fill="#9eaa8e" d="M80 28v16h16v8H72V28z"/>
+  <path fill="#111519" fill-rule="evenodd" d="M44 48h28v8h8v32h-8v8H44v-8h-8V56h8zm4 12v24h20V60z"/>
+  <path fill="#b7e45b" d="M48 76h4v-8h8v8h8v8H48z"/>
+  <path fill="#b7e45b" d="M60 60h8v8h-8z"/>
+  <path fill="#111519" d="M32 104h48v4H32z"/>
+</svg>

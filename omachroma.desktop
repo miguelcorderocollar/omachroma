@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Omachroma
+Comment=Forge a wallpaper matched to your Omarchy theme
+Keywords=wallpaper;wallpapers;background;theme;upscale;liftoff;omachroma;
+Exec=omarchy-shell shell summon mikelon797.omachroma
+Icon=@ICON@
+Terminal=false
+Categories=Graphics;Photography;
+StartupNotify=false
+X-Omachroma-Managed=true

@@ -1,0 +1,24 @@
+{
+  "checked": "2026-10-10",
+  "upscale": {
+    "seedvr": {
+      "rateText": "$0.001/MP",
+      "usdPerMP": 0.001
+    },
+    "aura": {
+      "rateText": "billed by compute time"
+    },
+    "clarity": {
+      "rateText": "$0.03/MP",
+      "usdPerMP": 0.03
+    },
+    "precision": {
+      "unitMP": 24,
+      "usd": 0.08
+    },
+    "creative": {
+      "unitMP": 2,
+      "usd": 0.08
+    }
+  }
+}
