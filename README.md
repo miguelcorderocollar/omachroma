@@ -40,7 +40,8 @@ omarchy-shell shell summon mikelon797.omachroma
 - Omarchy with the Quickshell plugin API, schema version 1. This release was
   checked on Omarchy 4.0.4-1 and Quickshell 0.3.1-1 on 14 October 2026.
 - Python 3.11+ and ImageMagick 7, providing the `magick` command.
-- System `python-gobject` and a desktop FileChooser portal for **Save as**.
+- System `python-gobject` and a desktop FileChooser portal for image selection
+  and **Save as**.
   Normal Omarchy sessions provide these; `xdg-desktop-portal-gtk` is one
   FileChooser backend. Export deliberately uses `/usr/bin/python3` so it can
   load the system PyGObject bindings.
@@ -70,8 +71,9 @@ running job can finish. Stop explicitly before disabling or removing the plugin.
 
 ## Use
 
-1. In Settings, save your fal.ai or OpenRouter key and choose a model. Upscaling
-   is off without a fal key, even when OpenRouter editing is enabled.
+1. In Settings → Keys, save your fal.ai or OpenRouter key. Choose a model in
+   Generation. Enable upscaling there if wanted; it requires a fal key, even
+   with OpenRouter editing. Its controls stay hidden while disabled.
 2. Add source images and select target themes. Each source/theme pair produces
    one output. Two sources and three themes make six outputs.
 3. Select references for each theme. Theme backgrounds supply the initial
@@ -86,7 +88,7 @@ exports a copy to a filename and location you choose, with JPG, PNG or WebP
 conversion when needed.
 
 **Output** selects a source/theme result. Clicking its thumbnail enlarges it.
-**Generate remaining** skips outputs already completed for the current recipe.
+The Generate output count includes only outputs remaining for the current recipe.
 Changing inputs, references, prompt or model starts a new recipe. **New variation**
 regenerates the selected output and may incur another charge.
 
@@ -103,14 +105,23 @@ tracking lasts for the current application session.
 In Upscale, choose an existing image and an engine. AuraSR is fixed at 4×;
 the bundled alternatives support 2× and 4×. A selected target theme receives
 the completed output automatically. Without a target theme, the result stays
-in the app's result folder until you export or save it.
+in the app's result folder until you export or save it. The Upscale workspace is
+disabled when upscaling is switched off.
 
-![Model management and pricing](docs/screenshots/settings.png)
+The file chooser remembers the last image folder and export folder separately.
+Keyboard shortcuts are listed in Settings → Keyboard. Tab and Shift+Tab move
+between controls, Enter/Space activate, and Escape closes a dialog before
+returning to the workspace. Ctrl+, opens Settings, Ctrl+H opens History,
+Ctrl+O chooses images, and Alt+G runs the primary action from the workspace.
+Generation shortcuts are inactive inside Settings, History and modal dialogs.
+
+![Generation settings](docs/screenshots/settings.png)
 
 ## Models and pricing
 
-Settings includes price refresh, a preferred-default action, hiding/showing
-models, and a validated JSON configuration editor. Your configuration can add
+Settings separates Generation, Models, Keys, Data and Keyboard. Models includes
+price refresh, preferred defaults, hiding/showing choices, and a validated
+configuration editor that opens in a modal dialog. Your configuration can add
 editing models and upscalers that use an existing request adapter. It can also
 provide manual rates and generation defaults. See [model configuration](docs/models.md).
 
@@ -148,6 +159,7 @@ Settings displays the active data directory. Files include:
 - `config.json`: generation settings and your default prompt.
 - `models.json`: your model choices, hidden entries, defaults and manual rates.
 - `catalog-cache.json`: last-good provider metadata and check dates.
+- `picker.json`: remembered image-selection and export folders.
 - `results/`: generated images and per-result prompt text.
 - `history/` and `current-job.json`: bounded metadata and preview selection.
   History includes source paths and outcomes, but no keys or prompts.
@@ -199,5 +211,8 @@ Tests use temporary files and mocked providers. They make no paid API calls.
 See [design](DESIGN.md), [changelog](CHANGELOG.md) and the [release checklist](docs/releasing.md).
 
 MIT license. Copyright 2026 Miguel Cordero. Omachroma is maintained independently
-and is not an official Omarchy plugin. README screenshots show a demonstration
-profile with original sample images; they do not represent a billed generation.
+and is not an official Omarchy plugin. README screenshots use an isolated profile showing a saved glaze wallpaper
+and its Ethereal result. The source/result are excluded from the reference
+strip; the visible references are distinct stock theme images. No generation
+was run for the screenshots. The reusable [demo scripts](scripts/demo/README.md)
+prepare isolated profiles and captures for screenshots or code-driven videos.

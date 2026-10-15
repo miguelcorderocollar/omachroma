@@ -1,58 +1,76 @@
 import QtQuick
+import QtQuick.Window
 import QtQuick.Controls as QQC
 import QtQuick.Layouts
 import qs.Commons
 import qs.Ui
 import "../logic/Omachroma.js" as Omachroma
+import "../logic/Focus.js" as Focus
 
 FocusScope {
   id: root
   required property var app
   focus: true
-  Keys.onEscapePressed: { if (lightbox.opened) lightbox.close(); else if (app.settingsOpen) app.settingsOpen = false; else if (app.historyOpen) app.historyOpen = false; else app.requestClose() }
-  Shortcut { sequence: "Alt+G"; enabled: app.opened && !lightbox.opened; onActivated: app.primaryAction() }
-  Shortcut { sequence: "Ctrl+,"; enabled: app.opened && !lightbox.opened; onActivated: { app.settingsOpen = !app.settingsOpen; app.historyOpen = false } }
-  Shortcut { sequence: "Ctrl+H"; enabled: app.opened && !lightbox.opened; onActivated: app.toggleHistory() }
+  readonly property bool modalOpen: lightbox.opened || modelEditor.opened || costDetails.opened
+  function goBack() { app.settingsOpen = false; app.historyOpen = false; Qt.callLater(workspaceGenerate.forceActiveFocus) }
+  function focusNavigation() { if (app.settingsOpen || app.historyOpen) header.focusBack(); else workspaceGenerate.forceActiveFocus() }
+  function revealFocus() {
+    var item = Window.window ? Window.window.activeFocusItem : null
+    var parent = item
+    while (parent && parent !== contentColumn) parent = parent.parent
+    if (!parent || !scroll.contentItem || scroll.contentItem.contentY === undefined) return
+    var position = item.mapToItem(contentColumn, 0, 0), viewport = scroll.contentItem
+    if (position.y < viewport.contentY) viewport.contentY = position.y
+    else if (position.y + item.height > viewport.contentY + scroll.height) viewport.contentY = position.y + item.height - scroll.height
+  }
+  Connections { target: root.Window.window; function onActiveFocusItemChanged() { Qt.callLater(root.revealFocus) } }
+  Keys.onEscapePressed: {
+    if (root.modalOpen || app.pickingImage) return
+    if (app.settingsOpen || app.historyOpen) root.goBack()
+    else app.requestClose()
+    event.accepted = true
+  }
+  Connections {
+    target: root.app
+    function onSettingsOpenChanged() { Focus.closePopups(root) }
+    function onHistoryOpenChanged() { Focus.closePopups(root) }
+    function onModeChanged() { Focus.closePopups(root) }
+  }
+  Connections { target: root.app.store; function onIoBusyChanged() { if (root.app.store.ioBusy) Focus.closePopups(root) } }
+  WorkspaceShortcuts { app: root.app; settings: settings; modalOpen: root.modalOpen; onBackRequested: root.goBack() }
   Rectangle { anchors.fill: parent; color: Qt.rgba(Color.menu.background.r, Color.menu.background.g, Color.menu.background.b, 1) }
   ColumnLayout {
+    id: mainColumn
+    enabled: !root.modalOpen
     anchors.fill: parent
     anchors.margins: Style.spacing.panelPadding
     spacing: Style.spacing.md
     AppHeader {
+      id: header
       Layout.fillWidth: true
       settingsOpen: app.settingsOpen
       historyOpen: app.historyOpen
       onSettingsRequested: { app.settingsOpen = !app.settingsOpen; app.historyOpen = false }
       onHistoryRequested: app.toggleHistory()
+      onBackRequested: root.goBack()
     }
     RowLayout {
+      visible: !app.settingsOpen && !app.historyOpen
       Layout.fillWidth: true
-      Button {
+      ActionButton {
+        id: workspaceGenerate
+        enabled: !app.editingLocked
         text: "Generate"; focusable: true; bordered: true; selected: app.mode === "generate"
         onClicked: { app.mode = "generate"; app.settingsOpen = false; app.historyOpen = false }
       }
-      Button {
+      ActionButton {
         text: "Upscale"; focusable: true; bordered: true; selected: app.mode === "upscale"
-        enabled: app.store.loaded && !!app.store.keys.fal
+        enabled: app.store.loaded && app.store.upscalingEnabled && !app.editingLocked
         opacity: enabled ? 1 : 0.45
-        tooltipText: enabled ? "Upscale using fal.ai" : "Requires a fal.ai API key"
+        tooltipText: enabled ? "Upscale · Ctrl+2" : "Enable upscaling in Settings"
         onClicked: { app.mode = "upscale"; app.settingsOpen = false; app.historyOpen = false }
       }
-      Text {
-        visible: app.store.loaded && !app.store.keys.fal
-        text: "fal.ai key required"; color: Color.muted
-        font.family: Style.font.family; font.pixelSize: Style.font.bodySmall
-      }
       Item { Layout.fillWidth: true }
-    }
-    RowLayout {
-      visible: !app.settingsOpen && !app.historyOpen && !app.keysReady && app.store.loaded
-      Layout.fillWidth: true
-      Text {
-        Layout.fillWidth: true; text: app.readiness; wrapMode: Text.WordWrap
-        color: Color.urgent; font.family: Style.font.family; font.pixelSize: Style.font.bodySmall
-      }
-      Button { text: "Add API key"; focusable: true; bordered: true; onClicked: app.settingsOpen = true }
     }
     PanelSeparator { Layout.fillWidth: true; foreground: Color.menu.text }
     QQC.ScrollView {
@@ -62,6 +80,7 @@ FocusScope {
       contentWidth: availableWidth
       clip: true
       Column {
+        id: contentColumn
         width: scroll.availableWidth
         spacing: Style.spacing.lg
         GenerateForm {
@@ -102,21 +121,16 @@ FocusScope {
           onFactorSelected: { app.store.update("upscaleFactor", factor) }
         }
         SettingsView {
+          id: settings
           visible: app.settingsOpen
           width: parent.width
           store: app.store
-          enabled: !app.busy && !app.store.busy
-          onUsePromptRequested: { app.prompt = app.config.prompt; app.notice = "Default prompt loaded into Generate." }
-          onFalKeyRequested: scroll.contentItem.contentY = 0
+          onUsePromptRequested: { app.prompt = app.config.prompt; root.goBack() }
+          onConfigureRequested: modelEditor.edit()
         }
         HistoryView {
           visible: app.historyOpen
           width: parent.width; history: app.history; jobBusy: app.busy
-        }
-        Text {
-          visible: app.notice !== ""
-          width: parent.width; text: app.notice; textFormat: Text.PlainText; wrapMode: Text.WordWrap
-          color: Color.muted; font.family: Style.font.family; font.pixelSize: Style.font.bodySmall
         }
         OutputSelector {
           visible: app.mode === "generate" && !app.settingsOpen && !app.historyOpen && app.plan.outputs.length > 0
@@ -131,7 +145,16 @@ FocusScope {
           resultPath: app.previewPath; busy: app.busy
           installedPath: app.previewInstalledPath
           onFolderRequested: app.openOutputFolder()
-          onPreviewRequested: { lightbox.open(path) }
+          onPreviewRequested: { lightbox.showImage(path) }
+        }
+        ResultActions {
+          visible: !app.settingsOpen && !app.historyOpen && app.previewPath !== ""
+          width: parent.width; canSet: !app.busy
+          theme: app.previewTheme; installedTheme: app.previewInstalledTheme
+          costText: Omachroma.reportedCost(app.previewCost)
+          onSaveRequested: app.exportOutput()
+          onThemeRequested: app.saveOutput()
+          onCostRequested: { costDetails.details = Omachroma.reportedCost(app.previewCost); costDetails.open() }
         }
       }
     }
@@ -139,35 +162,29 @@ FocusScope {
     FooterBar {
       visible: !app.settingsOpen && !app.historyOpen
       Layout.fillWidth: true
-      primaryLabel: app.mode === "upscale" ? "Upscale" : app.plan.totalCount > 200 ? "Reduce selection" : !app.plan.totalCount ? "Generate" : !app.plan.pending.length ? "All generated" : app.plan.pending.length === app.plan.jobs.length ? (app.plan.pending.length === 1 ? "Generate" : "Generate " + app.plan.pending.length + " outputs") : "Generate remaining (" + app.plan.pending.length + ")"
-      footText: app.saver.busy ? "Saving remaining outputs…" : app.references.busy ? "Loading theme references…" : app.pickingImage ? "Choosing images…" : app.busy || !app.preview ? app.job.state !== "idle" ? app.job.displayStatus : app.readiness : app.saver.message || app.job.actionMessage || (app.preview.status === "done" ? (app.preview.installedPath ? "Saved to " + app.preview.theme + "." : "Ready to save " + app.preview.theme + ".") : app.readiness)
-      lastError: app.saver.error || app.references.error || app.job.actionError || app.job.error
+      primaryLabel: app.mode === "upscale" ? "Upscale" : app.plan.totalCount > 200 ? "Reduce selection" : !app.plan.totalCount ? "Generate" : !app.plan.pending.length ? "All generated" : "Generate " + app.plan.pending.length + (app.plan.pending.length === 1 ? " output" : " outputs")
+      footText: app.saver.busy ? "Saving…" : app.pickingImage ? "Choosing images…" : app.job.busy || app.job.actionBusy ? app.job.displayStatus : ""
+      lastError: app.saver.error || app.references.error || app.job.actionError || app.job.error || app.notice
       costText: app.preview && app.preview.resultPath && !app.job.busy ? "Selected output · " + Omachroma.reportedCost(app.previewCost) : app.job.state !== "idle" && !app.job.busy && !app.preview ? Omachroma.reportedCost(app.job.cost) : (app.mode === "upscale" ? "Estimate\n" : (app.job.busy ? app.job.batchTotal + " queued outputs" : app.plan.pending.length + " remaining outputs") + " · estimate per output\n") + Omachroma.priceText(app.config, app.mode, app.store.prices, app.upscaleWidth, app.upscaleHeight, app.upscaleFactor, app.store.modelSpec, app.plan.pending.length)
       canPrimary: app.canPrimary
-      canSet: !app.busy && app.previewPath !== ""
-      resultAvailable: app.previewPath !== ""
-      themeName: app.previewTheme
-      installedTheme: app.previewInstalledTheme
       busy: app.job.busy
-      actionBusy: app.job.actionBusy || app.pickingImage || app.saver.busy || app.references.busy
+      actionBusy: app.job.actionBusy || app.pickingImage || app.saver.busy || app.references.busy || app.store.ioBusy
       onPrimaryClicked: app.primaryAction()
-      onSetClicked: app.saveOutput()
-      onSaveClicked: app.exportOutput()
       onClearClicked: app.clearPreview()
       onCancelClicked: app.job.cancel()
     }
-    Text {
-      visible: app.settingsOpen
-      Layout.fillWidth: true; wrapMode: Text.WordWrap
-      text: app.busy ? "A job is running. Settings unlock when it finishes." : app.store.error || app.store.message || "Changes save on this machine. Keys are never displayed again."
-      textFormat: Text.PlainText
-      color: app.store.error ? Color.urgent : Color.muted
-      font.family: Style.font.family; font.pixelSize: Style.font.bodySmall
-    }
+
+  }
+  ModelEditor { id: modelEditor; store: app.store; anchors.fill: parent; z: 11; onClosed: { if (!restoredFocus) Qt.callLater(root.focusNavigation) } }
+  ModalFrame {
+    id: costDetails; title: "Reported cost"; anchors.fill: parent; z: 11
+    onClosed: { if (!restoredFocus) Qt.callLater(root.focusNavigation) }
+    property string details: ""
+    Text { anchors.fill: parent; textFormat: Text.PlainText; text: costDetails.details; wrapMode: Text.WordWrap; color: Color.menu.text; font.family: Style.font.family; font.pixelSize: Style.font.body }
   }
   ImageLightbox {
     id: lightbox
     anchors.fill: parent; z: 10
-    onClosed: root.forceActiveFocus()
+    onClosed: { if (!restoredFocus) Qt.callLater(root.focusNavigation) }
   }
 }

@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 import signal
 import sys
-from backend import catalog, diagnostics, export, history, jobs, storage, themes, upscalers
+from backend import catalog, diagnostics, export, history, jobs, picker, storage, themes, upscalers
 
 
 def main():
@@ -27,6 +27,9 @@ def main():
     ap.add_argument('--save-models', action='store_true')
     ap.add_argument('--refresh-prices', action='store_true')
     ap.add_argument('--doctor', action='store_true')
+    ap.add_argument('--pick-images', action='store_true')
+    ap.add_argument('--multiple', action='store_true')
+    ap.add_argument('--picker-title', default='Choose images')
     ap.add_argument('--storage-info', action='store_true')
     ap.add_argument('--open-data-folder', action='store_true')
     ap.add_argument('--init-env', action='store_true')
@@ -56,7 +59,13 @@ def main():
     ap.add_argument('--tag')  # retained for older callers; jobs always use unique IDs
     ap.add_argument('--seed', type=int)
     args = ap.parse_args()
-    if args.storage_info:
+    if args.pick_images:
+        try:
+            paths = picker.choose('OpenFile', args.picker_title, multiple=args.multiple)
+        except Exception:
+            raise ValueError('The desktop image picker could not open. Check the FileChooser portal.') from None
+        print(json.dumps({'paths': [str(path) for path in paths]}))
+    elif args.storage_info:
         print(json.dumps(diagnostics.storage_usage()))
     elif args.open_data_folder:
         diagnostics.open_data_folder()

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.5.0 · release candidate
+
+- Simplify the workspace, align action sizes and use compact palette swatches.
+- Add organized Settings pages with Back navigation and a keyboard guide.
+- Add an explicit upscaling switch and hide inactive upscale controls.
+- Move model configuration into a focus-trapped modal dialog.
+- Remember native image/export picker folders and block workspace shortcuts
+  while dialogs, Settings or History own focus.
+- Replace the icon with a pixel-cut landscape O and palette marks.
+- Capture real saved-image examples and preserve reusable demo-generation code.
+
 ## 0.4.0 · release candidate
 
 - Rename OmaPaper to Omachroma. Existing data and history paths remain usable.

@@ -57,12 +57,6 @@ Column {
     onChanged: { root.targetsChanged(values); targetSelector.values = root.targetThemes }
   }
   Binding { target: targetSelector; property: "values"; value: root.targetThemes }
-  Text {
-    visible: root.sourcePaths.length > 0 && root.targetThemes.length > 0
-    width: parent.width; wrapMode: Text.WordWrap
-    text: root.sourcePaths.length + " source" + (root.sourcePaths.length === 1 ? "" : "s") + " × " + root.targetThemes.length + " theme" + (root.targetThemes.length === 1 ? "" : "s") + " = " + root.outputCount + " outputs"
-    color: Color.muted; font.family: Style.font.family; font.pixelSize: Style.font.bodySmall
-  }
   Dropdown {
     id: referenceSelector
     visible: root.targetThemes.length > 1
@@ -102,7 +96,7 @@ Column {
     font.pixelSize: Style.font.caption
     font.bold: true
   }
-  Button { visible: root.targetThemes.length > 0; text: "Add custom reference…"; focusable: true; bordered: true; onClicked: root.customRefRequested() }
+  ActionButton { visible: root.targetThemes.length > 0; text: "Add custom reference…"; focusable: true; bordered: true; onClicked: root.customRefRequested() }
   Flow {
     visible: root.targetThemes.length > 0
     width: parent.width
@@ -116,6 +110,7 @@ Column {
         Accessible.role: Accessible.CheckBox
         Accessible.name: modelData.name
         Accessible.checked: picked
+        Accessible.onPressAction: root.refToggled(modelData.path)
         property bool picked: root.pickedRefs.indexOf(modelData.path) >= 0
         BorderSurface {
           anchors.fill: parent

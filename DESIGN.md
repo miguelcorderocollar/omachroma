@@ -40,3 +40,22 @@ metadata refresh, provider payloads, dry-run safety, output isolation, partial
 success, history, atomic export, theme saving and batch/pricing logic. They use
 mocked providers and temporary files. Native shell validation and isolated UI
 checks supplement them. Paid provider integration is deliberately not run by automated checks.
+
+## Workspace and keyboard behavior
+
+Generate and Upscale share one compact action row. Settings replaces the mode
+row with Generation, Models, Keys, Data and Keyboard pages; Back preserves the
+workspace mode. Mutating controls use a shared I/O lock, including metadata
+refresh, without a state-binding cycle. Upscaling has a persisted opt-in flag
+and an effective off state whenever the fal key is absent.
+
+Model configuration and image preview use ModalFrame, which disables underlying
+controls, traps forward/backward Tab, and restores focus on close. Workspace
+shortcuts are blocked while a modal or native file chooser owns input and
+generation shortcuts are disabled in Settings and History. Native portal
+selection stores image/export directories separately in picker.json.
+
+Reusable demo preparation and scene capture code lives in scripts/demo. It
+accepts existing source/result/reference images, copies native modules into an
+isolated profile, and blocks provider operations. It can be sequenced later for
+code-driven video without automating the user's live desktop.

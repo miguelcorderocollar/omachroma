@@ -19,20 +19,14 @@ Column {
   }
   RowLayout {
     width: parent.width
-    Text {
-      Layout.fillWidth: true
-      text: root.plan.savedCount + " saved · " + root.plan.unsaved.length + " ready to save · " + root.plan.pending.length + " remaining"
-      wrapMode: Text.WordWrap; color: Color.muted
-      font.family: Style.font.family; font.pixelSize: Style.font.bodySmall
-    }
-    Button {
+    ActionButton {
       visible: root.plan.unsaved.length > 0
       text: "Save remaining (" + root.plan.unsaved.length + ")"
       enabled: !root.busy; focusable: true; bordered: true
       tooltipText: "Copy only completed, unsaved outputs to their own target themes"
       onClicked: root.saveRemaining()
     }
-    Button {
+    ActionButton {
       visible: !!(!root.external && root.plan.selected && (root.plan.selected.status === "done" || root.plan.selected.accepted))
       text: "New variation"; enabled: !root.busy; focusable: true; bordered: true
       tooltipText: "Generate this source/theme again. Billed as a new output; keep the old result in History."
@@ -40,10 +34,9 @@ Column {
     }
   }
   Text {
-    visible: root.plan.selected && !root.plan.selected.resultPath
-    width: parent.width; wrapMode: Text.WordWrap
-    text: root.plan.selected && root.plan.selected.error || "This output has not been generated yet."
-    color: root.plan.selected && root.plan.selected.error ? Color.urgent : Color.muted
-    font.family: Style.font.family; font.pixelSize: Style.font.bodySmall
+    visible: !root.external && !!(root.plan.selected && root.plan.selected.error)
+    width: parent.width; wrapMode: Text.WordWrap; textFormat: Text.PlainText
+    text: root.plan.selected && root.plan.selected.error || ""
+    color: Color.urgent; font.family: Style.font.family; font.pixelSize: Style.font.bodySmall
   }
 }

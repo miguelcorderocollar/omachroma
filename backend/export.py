@@ -10,55 +10,9 @@ FORMATS = {'.jpg', '.jpeg', '.png', '.webp'}
 
 
 def choose_destination(source):
-    # The caller uses /usr/bin/python3 for the system PyGObject bindings.
-    import gi
-    gi.require_version('Gio', '2.0')
-    from gi.repository import Gio, GLib
-
-    bus = Gio.bus_get_sync(Gio.BusType.SESSION, None)
-    loop = GLib.MainLoop()
-    picked = []
-    answered = []
-    token = 'omachroma' + str(os.getpid())
-    sender = bus.get_unique_name()[1:].replace('.', '_')
-    predicted = '/org/freedesktop/portal/desktop/request/' + sender + '/' + token
-
-    def response(connection, sender_name, path, interface, signal, params):
-        code, values = params.unpack()
-        answered.append(code)
-        if code == 0:
-            picked.extend(values.get('uris', []))
-        loop.quit()
-
-    def subscribe(path):
-        return bus.signal_subscribe('org.freedesktop.portal.Desktop',
-            'org.freedesktop.portal.Request', 'Response', path, None,
-            Gio.DBusSignalFlags.NONE, response)
-
-    subscriptions = [subscribe(predicted)]
-    filters = [('Images', [(0, '*.jpg'), (0, '*.jpeg'), (0, '*.png'), (0, '*.webp')])]
-    options = {'handle_token': GLib.Variant('s', token),
-               'current_name': GLib.Variant('s', 'omachroma-' + source.parent.name + source.suffix),
-               'filters': GLib.Variant('a(sa(us))', filters)}
-    handle = bus.call_sync('org.freedesktop.portal.Desktop',
-        '/org/freedesktop/portal/desktop', 'org.freedesktop.portal.FileChooser',
-        'SaveFile', GLib.Variant('(ssa{sv})', ('', 'Save wallpaper as', options)),
-        None, Gio.DBusCallFlags.NONE, -1, None).unpack()[0]
-    if handle != predicted:
-        subscriptions.append(subscribe(handle))
-    timer = GLib.timeout_add_seconds(600, loop.quit)
-    loop.run()
-    if answered:
-        GLib.source_remove(timer)
-    for subscription in subscriptions:
-        bus.signal_unsubscribe(subscription)
-    if not answered:
-        raise ValueError('Save dialog timed out. Try Save as again.')
-    if answered[0] == 1:
-        return None
-    if answered[0] != 0 or not picked:
-        raise ValueError('The desktop save dialog could not choose a destination.')
-    return Path(GLib.filename_from_uri(picked[0])[0])
+    from . import picker
+    paths = picker.choose('SaveFile', 'Save wallpaper as', source=source)
+    return paths[0] if paths else None
 
 
 def copy_image(source, destination):

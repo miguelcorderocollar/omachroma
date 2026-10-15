@@ -40,7 +40,7 @@ Column {
       text: root.upscalePath
       onTextEdited: root.pathEdited(text)
     }
-    Button {
+    ActionButton {
       id: upscaleBrowseButton
       anchors.right: parent.right
       anchors.verticalCenter: parent.verticalCenter

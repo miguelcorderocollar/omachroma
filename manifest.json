@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "mikelon797.omachroma",
   "name": "Omachroma",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "author": "mikelon797",
   "license": "MIT",
   "description": "Theme-matched AI wallpapers with fal or OpenRouter, custom references and SeedVR2, AuraSR, Clarity or Topaz upscaling.",

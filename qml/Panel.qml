@@ -46,8 +46,8 @@ Item {
   readonly property string backend: decodeURIComponent(String(Qt.resolvedUrl("../generate-theme-wallpaper.py")).replace(/^file:\/\//, ""))
   readonly property var config: store.effectiveConfig
   readonly property int referenceLimit: Math.max(1, (store.modelSpec.maxImages || 5) - 1)
-  readonly property bool busy: job.busy || job.actionBusy || picker.busy || saver.busy
-  readonly property bool editingLocked: job.busy || job.actionBusy || saver.busy
+  readonly property bool busy: job.busy || job.actionBusy || picker.busy || saver.busy || store.ioBusy
+  readonly property bool editingLocked: job.busy || job.actionBusy || saver.busy || store.ioBusy
   readonly property bool pickingImage: picker.busy
   readonly property bool keysReady: store.loaded && (mode === "upscale" ? !!store.keys.fal : !!store.keys[config.provider])
   readonly property string referenceReadiness: Planning.ready(targetThemes, references.data, referenceLimit)
@@ -166,16 +166,19 @@ Item {
     id: store
     backend: root.backend
     locked: root.editingLocked
+    onEffectiveConfigChanged: { if (root.mode === "upscale" && !store.upscalingEnabled) root.mode = "generate" }
+    onIoBusyChanged: {
+      if (!ioBusy && loaded && !root.theme) {
+        var previous = lastJob && (lastJob.installedTheme || lastJob.theme) || currentTheme
+        if (themes.indexOf(previous) >= 0) root.selectTheme(previous)
+      }
+    }
     onLoadedChanged: {
       if (loaded && job.state === "idle" && store.lastJob) {
         job.restore(store.lastJob)
         root.externalOutput = store.lastJob.resultExists ? store.lastJob : store.lastJob.previousResult || null
       }
       if (loaded && !root.prompt) root.prompt = config.prompt
-      if (loaded && !root.theme) {
-        var restoredTheme = store.lastJob && (store.lastJob.installedTheme || store.lastJob.theme) || currentTheme
-        if (themes.indexOf(restoredTheme) >= 0) root.selectTheme(restoredTheme)
-      }
     }
   }
   JobController {
@@ -199,11 +202,12 @@ Item {
       if (root.busy) return
       job.restore(result); root.historyOpen = false
       root.externalOutput = Object.assign({}, result, {theme: result.installedTheme || result.theme})
-      root.notice = "Showing history for " + (result.name || "wallpaper")
+      root.notice = ""
     }
   }
   ImagePicker {
     id: picker
+    backend: root.backend
     onSelected: {
       if (target === "upscale") root.upscalePath = paths[0]
       else if (target === "reference") {

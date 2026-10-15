@@ -18,11 +18,13 @@ Item {
   property var providerDefaults: ({})
   property var environmentKeys: ({})
   property string catalogWarning: ""
+  property string refreshWarning: ""
   property string dataPath: ""
   property var storageInfo: null
   readonly property bool dataBusy: dataProc.running
   property var keys: ({fal: false, openrouter: false})
-  readonly property var effectiveConfig: Object.assign({}, config, {upscaler: keys.fal ? config.upscaler : "none"})
+  readonly property bool upscalingEnabled: !!keys.fal && config.upscaleEnabled === true && config.upscaler !== "none"
+  readonly property var effectiveConfig: Object.assign({}, config, {upscaler: upscalingEnabled ? config.upscaler : "none", upscaleEnabled: upscalingEnabled})
   property var lastJob: null
   property string error: ""
   property string message: ""
@@ -34,7 +36,10 @@ Item {
       if (models[i].value === config.model) return models[i]
     return models.length ? models[0] : ({resolutions: [], qualityOptions: [], maxImages: 5})
   }
-  readonly property bool busy: locked || loadProc.running || saveProc.running
+  readonly property bool ioBusy: loadProc.running || saveProc.running || dataProc.running
+  readonly property bool refreshing: saveProc.running && saveProc.command.indexOf("--refresh-prices") >= 0
+  readonly property bool busy: locked || ioBusy
+  signal modelsSaved()
   function accept(text) {
     try {
       var data = JSON.parse(text)
@@ -45,6 +50,7 @@ Item {
       modelConfig = data.modelConfig; providerDefaults = data.providerDefaults
       environmentKeys = data.environmentKeys; catalogWarning = data.catalogWarning || ""
       dataPath = data.dataPath || ""
+      if (data.refresh) refreshWarning = data.refresh.warnings.join(" ")
       if (data.refresh) message = data.refresh.updated + " rates refreshed; " + (data.refresh.availabilityUpdated || 0) + " availability entries checked." + (data.refresh.warnings.length ? " " + data.refresh.warnings.join(" ") : "")
     } catch (e) { error = "Could not read Settings. Check the local config file." }
   }
@@ -57,9 +63,14 @@ Item {
     if (!loaded || busy) return
     var next = Object.assign({}, config)
     next[key] = value
+    if (key === "upscaleEnabled" && value && next.upscaler === "none") {
+      var engine = upscaleOptions.filter(function(option) { return option.value !== "none" })[0]
+      if (!keys.fal || !engine) return
+      next.upscaler = engine.value; next.upscaleModel = (upscaleModels[engine.value] || [""])[0]
+    }
     if (key === "provider") next.model = providerDefaults[value]
     if (key === "upscaler") next.upscaleModel = (upscaleModels[value] || [""])[0] || ""
-    saveProc.successMessage = "Settings saved."
+    saveProc.successMessage = ""
     saveProc.payload = JSON.stringify(next) + "\n"
     saveProc.command = ["python3", backend, "--save-config"]
     saveProc.running = true
@@ -97,7 +108,7 @@ Item {
     saveProc.successMessage = ""
     saveProc.payload = ""
     saveProc.command = ["python3", backend, "--refresh-prices"]
-    message = "Refreshing provider metadata. Images and prompts are not sent."
+    message = ""
     saveProc.running = true
   }
   function dataAction(open) {
@@ -136,6 +147,7 @@ Item {
     stderr: StdioCollector { id: saveError; waitForEnd: true }
     onExited: {
       payload = ""
+      if (exitCode === 0 && command.indexOf("--save-models") >= 0) root.modelsSaved()
       if (successMessage || exitCode !== 0) root.message = exitCode === 0 ? successMessage : ""
       if (exitCode !== 0) {
         try { root.error = JSON.parse(saveError.text).message }

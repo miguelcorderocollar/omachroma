@@ -27,14 +27,14 @@ Column {
       Accessible.name: "Add source image path"
       onAccepted: root.addPath()
     }
-    Button {
+    ActionButton {
       iconText: "󰐕"; focusable: true; bordered: true
       Layout.preferredHeight: pathField.implicitHeight
       enabled: pathField.text.trim() !== ""
       Accessible.name: "Add source image path"; tooltipText: "Add image path"
       onClicked: root.addPath()
     }
-    Button {
+    ActionButton {
       iconText: "󰉋"; focusable: true; bordered: true
       Layout.preferredHeight: pathField.implicitHeight
       Accessible.name: "Choose source images"; tooltipText: "Choose one or more source images"

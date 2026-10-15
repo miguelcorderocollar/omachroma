@@ -33,7 +33,7 @@ UPSCALE_MODELS = upscalers.MODELS
 
 DEFAULTS = {'provider': 'fal', 'model': DEFAULT_PROVIDER_MODELS['fal'], 'res': '1K', 'quality': 'high',
             'upscaler': upscalers.DEFAULT, 'upscaleModel': 'SeedVR2', 'upscaleFactor': 2, 'creativity': 5,
-            'prompt': DEFAULT_PROMPT}
+            'prompt': DEFAULT_PROMPT, 'upscaleEnabled': False}
 
 
 def atomic_write(path, text, mode=0o600):
@@ -97,6 +97,11 @@ def normalize_config(value):
     defaults['upscaler'] = upscalers.default_kind()
     defaults['upscaleModel'] = custom['defaults'].get('upscaleModel', next(iter(upscalers.catalog()[defaults['upscaler']]['models']), ''))
     c = defaults | {k: v for k, v in value.items() if k in DEFAULTS}
+    # Preserve legacy enabled engines; new installs require an explicit opt-in.
+    if 'upscaleEnabled' not in value and 'upscaler' in value:
+        c['upscaleEnabled'] = value['upscaler'] != 'none'
+    if not isinstance(c['upscaleEnabled'], bool):
+        c['upscaleEnabled'] = False
     if not isinstance(c['provider'], str) or c['provider'] not in EDIT_MODELS:
         c['provider'] = 'fal'
     if c['model'] not in [m['value'] for m in catalog.models(c['provider'])]:
@@ -240,6 +245,9 @@ def remove_key(provider):
             raise ValueError('Credential file is too large; left unchanged.')
         lines = [line for line in path.read_text().splitlines() if line.partition('=')[0].strip() != name]
         atomic_write(path, '\n'.join(lines) + ('\n' if lines else ''))
+    if provider == 'fal' and not os.environ.get('FAL_KEY'):
+        current = config(); current['upscaleEnabled'] = False
+        atomic_write(DATA / 'config.json', json.dumps(current, indent=2) + '\n')
 
 
 def remove_launcher(legacy=False):

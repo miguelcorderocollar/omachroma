@@ -23,7 +23,7 @@ Column {
   }
   CursorSurface {
     id: thumbnail
-    width: Style.space(176); height: Style.space(99)
+    width: Style.space(256); height: Style.space(144)
     foreground: root.foreground; hasCursor: hover.hovered || activeFocus
     activeFocusOnTab: true
     Accessible.role: Accessible.Button
@@ -33,7 +33,7 @@ Column {
     Image {
       anchors.fill: parent; anchors.margins: Style.space(2)
       source: root.resultPath !== "" ? "file://" + root.resultPath : ""
-      asynchronous: true; sourceSize.width: 352; fillMode: Image.PreserveAspectFit
+      asynchronous: true; sourceSize.width: 768; fillMode: Image.PreserveAspectFit
       Accessible.name: "Result thumbnail"
     }
     HoverHandler { id: hover; cursorShape: Qt.PointingHandCursor }
@@ -50,7 +50,7 @@ Column {
       text: (root.installedPath || root.resultPath).replace(Quickshell.env("HOME"), "~")
       color: Color.muted; font.family: Style.font.family; font.pixelSize: Style.font.caption
     }
-    PanelActionButton {
+    IconAction {
       focusable: true; iconText: "󰉋"; tooltipText: "Open saved folder"
       Accessible.name: tooltipText
       onClicked: root.folderRequested()

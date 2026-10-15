@@ -9,29 +9,29 @@ RowLayout {
   property bool historyOpen: false
   signal settingsRequested()
   signal historyRequested()
-  spacing: Style.spacing.md
-  Column {
-    Layout.fillWidth: true
-    spacing: Style.space(2)
-    Text {
-      text: "Omachroma"
-      color: Color.menu.text
-      font.family: Style.font.family; font.pixelSize: Style.font.title; font.bold: true
-    }
-
+  signal backRequested()
+  function focusBack() { back.forceActiveFocus() }
+  spacing: Style.spacing.sm
+  IconAction {
+    id: back
+    visible: root.settingsOpen || root.historyOpen
+    iconText: "󰁍"; tooltipText: "Back · Alt+Left"
+    onClicked: root.backRequested()
   }
-  Button {
-    text: root.historyOpen ? "Back" : "History"
-    selected: root.historyOpen; focusable: true; bordered: true
-    tooltipText: "Saved wallpapers and job status · Ctrl+H"
+  Text {
+    Layout.fillWidth: true; textFormat: Text.PlainText
+    text: root.settingsOpen ? "Omachroma / Settings" : root.historyOpen ? "Omachroma / History" : "Omachroma"
+    color: Color.menu.text; font.family: Style.font.family
+    font.pixelSize: Style.font.title; font.bold: true
+  }
+  IconAction {
+    visible: !root.settingsOpen && !root.historyOpen
+    iconText: "󰋚"; tooltipText: "History · Ctrl+H"
     onClicked: root.historyRequested()
   }
-  Button {
-    iconText: "󰒓"
-    selected: root.settingsOpen; focusable: true; bordered: true
-    foreground: Color.menu.text
-    tooltipText: "Settings · Ctrl+,"
-    Accessible.name: "Settings"
+  IconAction {
+    visible: !root.settingsOpen && !root.historyOpen
+    iconText: "󰒓"; tooltipText: "Settings · Ctrl+,"
     onClicked: root.settingsRequested()
   }
 }

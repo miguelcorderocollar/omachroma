@@ -41,18 +41,21 @@ Column {
       Accessible.name: root.hasKey ? root.label + " saved API key, masked. Type to replace." : root.label + " API key"
       onAccepted: { root.saveRequested(root.provider, text); clear() }
     }
-    Button {
+    IconAction {
       id: saveButton
       iconText: "󰆓"; focusable: true; bordered: true
       Layout.alignment: Qt.AlignVCenter
       Layout.preferredHeight: keyField.implicitHeight
+      Layout.preferredWidth: keyField.implicitHeight
       Accessible.name: "Save " + root.label + " API key"
       enabled: !root.locked && keyField.text.trim() !== ""
       tooltipText: "Save " + root.label + " API key"
       onClicked: { root.saveRequested(root.provider, keyField.text); keyField.clear() }
     }
-    Button {
-      text: "Remove saved key"; focusable: true; bordered: true
+    IconAction {
+      iconText: "󰆴"; tooltipText: "Remove saved " + root.label + " key"
+      hoverColor: Color.urgent
+      Layout.preferredHeight: keyField.implicitHeight; Layout.preferredWidth: keyField.implicitHeight
       enabled: root.hasKey && !root.locked
       onClicked: root.removeRequested(root.provider)
     }
