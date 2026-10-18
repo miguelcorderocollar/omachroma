@@ -9,7 +9,6 @@
 - Remember native image/export picker folders and block workspace shortcuts
   while dialogs, Settings or History own focus.
 - Set the pixel-cut landscape O to the Tokyo Night palette and remove the swatches.
-- Add a matching Tokyo Night banner to the README.
 - Capture real saved-image examples and preserve reusable demo-generation code.
 
 ## 0.4.0 · release candidate

@@ -9,10 +9,6 @@
   references, generate a batch across several themes, or upscale an existing image.
 </p>
 
-<p align="center">
-  <img src="assets/omachroma-banner.jpg" alt="Abstract Tokyo Night landscape with blue, violet and amber light" width="100%">
-</p>
-
 ![Omachroma Generate view](preview.png)
 
 Omachroma is a community plugin for Omarchy's Quickshell shell. It uses fal.ai
