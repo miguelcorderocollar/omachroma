@@ -1,4 +1,4 @@
-# Omachroma image models
+# Omatinta image models
 
 These are dated research notes from private development, not a live model catalog.
 See [model configuration](docs/models.md) and [pricing](docs/pricing.md) for current application behavior.

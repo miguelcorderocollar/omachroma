@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import qs.Commons
 import qs.Ui
-import "../logic/Omachroma.js" as Omachroma
+import "../logic/Omatinta.js" as Omatinta
 
 Column {
   id: root
@@ -88,7 +88,7 @@ Column {
           Text {
             visible: !!entry.modelData.cost
             width: parent.width; wrapMode: Text.WordWrap; textFormat: Text.PlainText
-            text: Omachroma.reportedCost(entry.modelData.cost)
+            text: Omatinta.reportedCost(entry.modelData.cost)
             color: Color.muted; font.family: Style.font.family; font.pixelSize: Style.font.caption
           }
         }

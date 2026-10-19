@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Omachroma backend. Local queries are free; API jobs require --run."""
+"""Omatinta backend. Local queries are free; API jobs require --run."""
 import argparse
 import json
 from pathlib import Path

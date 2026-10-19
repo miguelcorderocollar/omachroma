@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import assert from 'node:assert/strict';
 const ctx = vm.createContext({});
-vm.runInContext(fs.readFileSync(new URL('../qml/logic/Omachroma.js', import.meta.url), 'utf8'), ctx);
+vm.runInContext(fs.readFileSync(new URL('../qml/logic/Omatinta.js', import.meta.url), 'utf8'), ctx);
 const prices = {checked: '2026-10-12', upscale: {precision: {unitMP: 24, usd: 0.08}}};
 const spec = {price: {'2K': 0.135}, dimensions: {'2K': [2048, 1152]}, priceChecked: '2026-10-12'};
 const config = {res: '2K', upscaler: 'precision', upscaleFactor: 4};

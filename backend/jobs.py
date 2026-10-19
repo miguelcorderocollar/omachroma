@@ -132,7 +132,7 @@ def _run(args):
     tag = datetime.now().strftime('%Y%m%d-%H%M%S') + '-' + uuid.uuid4().hex[:8]
     out = Path(args.repo_dir).expanduser().resolve() / (args.theme or 'upscaled') / tag
     out.mkdir(parents=True)
-    with tempfile.TemporaryDirectory(prefix='omachroma-') as scratch:
+    with tempfile.TemporaryDirectory(prefix='omatinta-') as scratch:
         compressed = []
         for i, p in enumerate(images):
             dest = Path(scratch) / f'{i}.jpg'

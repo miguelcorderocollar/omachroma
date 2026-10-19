@@ -38,8 +38,10 @@ class ThemeTests(unittest.TestCase):
   self.assertEqual(value['installedTheme'],'nord')
  def test_legacy_wallpaper_names_stay_recognized_after_rename(self):
   saved=Path(themes.save_image(self.source,'nord')['installedPath'])
-  legacy=saved.with_name(saved.name.replace('01-omachroma-','01-omapaper-'))
-  saved.rename(legacy)
-  self.assertEqual(themes.installed_path(str(self.source),'nord'),str(legacy))
-  self.assertEqual(themes.installed_path(str(self.source),'nord',str(legacy)),str(legacy))
+  for legacy_prefix in ('01-omachroma-','01-omapaper-'):
+   legacy=saved.with_name(saved.name.replace('01-omatinta-',legacy_prefix))
+   if saved.exists(): saved.rename(legacy)
+   self.assertEqual(themes.installed_path(str(self.source),'nord'),str(legacy))
+   self.assertEqual(themes.installed_path(str(self.source),'nord',str(legacy)),str(legacy))
+   if legacy.exists(): legacy.rename(saved)
 if __name__=='__main__':unittest.main()

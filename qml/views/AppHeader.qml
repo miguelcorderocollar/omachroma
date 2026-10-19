@@ -20,7 +20,7 @@ RowLayout {
   }
   Text {
     Layout.fillWidth: true; textFormat: Text.PlainText
-    text: root.settingsOpen ? "Omachroma / Settings" : root.historyOpen ? "Omachroma / History" : "Omachroma"
+    text: root.settingsOpen ? "Omatinta / Settings" : root.historyOpen ? "Omatinta / History" : "Omatinta"
     color: Color.menu.text; font.family: Style.font.family
     font.pixelSize: Style.font.title; font.bold: true
   }

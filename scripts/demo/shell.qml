@@ -13,7 +13,7 @@ Scope {
   function windowForApp() {
     for (var i = 0; i < app.data.length; i++) {
       var child = app.data[i]
-      if (child.title === "Omachroma") return child
+      if (child.title === "Omatinta") return child
     }
     return null
   }
@@ -81,7 +81,7 @@ Scope {
   }
 
   IpcHandler {
-    target: "omachroma-demo"
+    target: "omatinta-demo"
     function workspace(): void {
       app.settingsOpen = false
       app.historyOpen = false

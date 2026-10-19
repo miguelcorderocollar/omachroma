@@ -1,6 +1,9 @@
 # Release checklist
 
-The standalone repository is public at https://github.com/miguelcorderocollar/omachroma. The `main` branch can be installed directly using the README command. No tagged GitHub release or marketplace listing has been created. CI/CD remains intentionally out of scope.
+This repository is a locally prepared release candidate under the Omatinta
+name (formerly Omachroma). No public repository, tagged release or
+marketplace listing has been created yet under the new name. CI/CD remains
+intentionally out of scope.
 
 ## Before the first tagged beta
 
@@ -20,9 +23,9 @@ The guide requires a public GitHub repository, root manifest, README/license and
 
 Prepare the marketplace issue form with:
 
-- Repository: https://github.com/miguelcorderocollar/omachroma
-- Name: Omachroma
-- ID: mikelon797.omachroma
+- Repository: https://github.com/miguelcorderocollar/omatinta
+- Name: Omatinta
+- ID: mikelon797.omatinta
 - Category: Appearance
 - Tags: AI, Quickshell
 - Suggested missing tag: Wallpaper

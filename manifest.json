@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "id": "mikelon797.omachroma",
-  "name": "Omachroma",
+  "id": "mikelon797.omatinta",
+  "name": "Omatinta",
   "version": "0.5.0",
   "author": "mikelon797",
   "license": "MIT",
@@ -17,7 +17,7 @@
   "keepLoaded": true,
   "panel": {
     "aliases": [
-      "omachroma",
+      "omatinta",
       "wallpaper",
       "upscale"
     ]

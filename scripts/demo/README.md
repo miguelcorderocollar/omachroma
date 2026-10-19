@@ -1,4 +1,4 @@
-# Code driven Omachroma demo
+# Code driven Omatinta demo
 
 `prepare.py` builds an isolated Quickshell profile from a saved source/result
 pair and explicit style references. It copies the current plugin to `app/`,
@@ -31,8 +31,8 @@ python3 scripts/demo/prepare.py \
   --result /path/to/saved-result.jpg \
   --theme ethereal \
   --references /path/to/stock-cosmic.jpg /path/to/stock-meadow.jpg \
-  --output-dir /tmp/omachroma-demo
-source /tmp/omachroma-demo/render-env.sh
+  --output-dir /tmp/omatinta-demo
+source /tmp/omatinta-demo/render-env.sh
 DEMO_CAPTURE_PATH="$DEMO_ROOT/app/preview.png" DEMO_EXIT_AFTER_CAPTURE=1 \
   quickshell --no-color -p "$DEMO_ROOT/shell.qml"
 DEMO_HEIGHT=560 DEMO_START_VIEW=settings DEMO_SETTINGS_TAB=Generation \
@@ -51,13 +51,13 @@ IPC. List the process with `quickshell ipc -p "$DEMO_ROOT/shell.qml" show`,
 then call:
 
 ```bash
-quickshell ipc -p "$DEMO_ROOT/shell.qml" call omachroma-demo workspace
-quickshell ipc -p "$DEMO_ROOT/shell.qml" call omachroma-demo settings Generation
-quickshell ipc -p "$DEMO_ROOT/shell.qml" call omachroma-demo settings Models
-quickshell ipc -p "$DEMO_ROOT/shell.qml" call omachroma-demo history
-quickshell ipc -p "$DEMO_ROOT/shell.qml" call omachroma-demo preview
-quickshell ipc -p "$DEMO_ROOT/shell.qml" call omachroma-demo dismissPreview
-quickshell ipc -p "$DEMO_ROOT/shell.qml" call omachroma-demo captureTo /tmp/omachroma-frame.png
+quickshell ipc -p "$DEMO_ROOT/shell.qml" call omatinta-demo workspace
+quickshell ipc -p "$DEMO_ROOT/shell.qml" call omatinta-demo settings Generation
+quickshell ipc -p "$DEMO_ROOT/shell.qml" call omatinta-demo settings Models
+quickshell ipc -p "$DEMO_ROOT/shell.qml" call omatinta-demo history
+quickshell ipc -p "$DEMO_ROOT/shell.qml" call omatinta-demo preview
+quickshell ipc -p "$DEMO_ROOT/shell.qml" call omatinta-demo dismissPreview
+quickshell ipc -p "$DEMO_ROOT/shell.qml" call omatinta-demo captureTo /tmp/omatinta-frame.png
 ```
 
 `captureTo` saves the `AppContent` item with `grabToImage`; it does not capture

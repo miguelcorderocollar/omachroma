@@ -191,7 +191,7 @@ class CatalogTests(unittest.TestCase):
     def test_launcher_cleanup_protects_user_entry(self):
         with patch.dict('os.environ', {'XDG_DATA_HOME': str(self.data)}):
             storage.install_launcher(); storage.remove_launcher()
-            path = self.data / 'applications/omachroma.desktop'; self.assertFalse(path.exists())
+            path = self.data / 'applications/omatinta.desktop'; self.assertFalse(path.exists())
             path.write_text('[Desktop Entry]\nName=Custom\n')
             with self.assertRaises(ValueError): storage.remove_launcher()
             self.assertTrue(path.exists())

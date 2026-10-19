@@ -24,7 +24,7 @@ Column {
     Text {
       visible: root.hasKey
       text: "✓"
-      color: Color.pick("omachroma.success", "mediumseagreen")
+      color: Color.pick("omatinta.success", "mediumseagreen")
       font.family: Style.font.family; font.pixelSize: Style.font.bodySmall
       Accessible.name: root.label + " API key saved"
     }

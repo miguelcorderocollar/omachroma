@@ -27,4 +27,4 @@ assert.equal(ctx.status({status: 'done', theme: 'nord', installedTheme: 'nord', 
 assert.equal(ctx.status({status: 'done', theme: 'nord', installedTheme: 'other', installedPath: '/saved.jpg'}), 'Ready to save');
 assert.equal(ctx.status({status: 'failed', resultPath: '/partial.png', theme: 'nord', installedTheme: 'nord', installedPath: '/saved.jpg'}), 'Partial · Saved');
 assert.equal(ctx.status({status: 'failed'}), 'Failed');
-console.log('Omachroma plan checks passed: rectangular batches, isolated references, new recipes, readiness and saved/partial states.');
+console.log('Omatinta plan checks passed: rectangular batches, isolated references, new recipes, readiness and saved/partial states.');

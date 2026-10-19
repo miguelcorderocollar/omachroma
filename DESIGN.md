@@ -1,6 +1,6 @@
-# Omachroma implementation
+# Omatinta implementation
 
-Omachroma is a launcher-first panel/service plugin. The panel owns a normal
+Omatinta is a launcher-first panel/service plugin. The panel owns a normal
 application window so the compositor can resize, float or tile it. It uses the
 Omarchy Commons/Ui theme tokens and controls. The keepLoaded contract preserves
 running jobs and previews when the window closes.

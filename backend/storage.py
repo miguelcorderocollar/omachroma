@@ -9,7 +9,13 @@ from . import upscalers
 HOME = Path.home()
 _base = Path(os.environ.get('XDG_DATA_HOME', HOME / '.local/share'))
 # Keep legacy paths intact so saved result/history references remain valid.
-DATA = _base / ('omapaper' if (_base / 'omapaper').is_dir() and not (_base / 'omachroma').exists() else 'omachroma')
+# Prefer omatinta; fall back to omachroma, then omapaper.
+def _resolve_data(base):
+    for name in ('omatinta', 'omachroma', 'omapaper'):
+        if (base / name).is_dir():
+            return base / name
+    return base / 'omatinta'
+DATA = _resolve_data(_base)
 STOCK = Path(os.environ.get('OMARCHY_PATH', '/usr/share/omarchy')) / 'themes'
 USER = HOME / '.config/omarchy/themes'
 BACKGROUNDS = HOME / '.config/omarchy/backgrounds'

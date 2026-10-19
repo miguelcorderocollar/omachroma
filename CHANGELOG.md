@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Rename Omachroma to Omatinta (Oma + Spanish tinta/tint). Keep `omachroma`
+  and `omapaper` data directories, wallpaper names and launchers usable as
+  legacy fallbacks.
+
 ## 0.5.0 · release candidate
 
 - Simplify the workspace, align action sizes and use compact palette swatches.

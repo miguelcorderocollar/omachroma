@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Omachroma provider-reported cost tests. No live provider calls."""
+"""Omatinta provider-reported cost tests. No live provider calls."""
 import argparse
 import base64
 import contextlib
@@ -18,7 +18,7 @@ sys.path.insert(0, str(PLUGIN))
 from backend import costs, history, jobs, providers, storage
 
 
-class OmachromaCostTests(unittest.TestCase):
+class OmatintaCostTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)

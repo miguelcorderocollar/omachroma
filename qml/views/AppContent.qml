@@ -4,7 +4,7 @@ import QtQuick.Controls as QQC
 import QtQuick.Layouts
 import qs.Commons
 import qs.Ui
-import "../logic/Omachroma.js" as Omachroma
+import "../logic/Omatinta.js" as Omatinta
 import "../logic/Focus.js" as Focus
 
 FocusScope {
@@ -151,10 +151,10 @@ FocusScope {
           visible: !app.settingsOpen && !app.historyOpen && app.previewPath !== ""
           width: parent.width; canSet: !app.busy
           theme: app.previewTheme; installedTheme: app.previewInstalledTheme
-          costText: Omachroma.reportedCost(app.previewCost)
+          costText: Omatinta.reportedCost(app.previewCost)
           onSaveRequested: app.exportOutput()
           onThemeRequested: app.saveOutput()
-          onCostRequested: { costDetails.details = Omachroma.reportedCost(app.previewCost); costDetails.open() }
+          onCostRequested: { costDetails.details = Omatinta.reportedCost(app.previewCost); costDetails.open() }
         }
       }
     }
@@ -165,7 +165,7 @@ FocusScope {
       primaryLabel: app.mode === "upscale" ? "Upscale" : app.plan.totalCount > 200 ? "Reduce selection" : !app.plan.totalCount ? "Generate" : !app.plan.pending.length ? "All generated" : "Generate " + app.plan.pending.length + (app.plan.pending.length === 1 ? " output" : " outputs")
       footText: app.saver.busy ? "Saving…" : app.pickingImage ? "Choosing images…" : app.job.busy || app.job.actionBusy ? app.job.displayStatus : ""
       lastError: app.saver.error || app.references.error || app.job.actionError || app.job.error || app.notice
-      costText: app.preview && app.preview.resultPath && !app.job.busy ? "Selected output · " + Omachroma.reportedCost(app.previewCost) : app.job.state !== "idle" && !app.job.busy && !app.preview ? Omachroma.reportedCost(app.job.cost) : (app.mode === "upscale" ? "Estimate\n" : (app.job.busy ? app.job.batchTotal + " queued outputs" : app.plan.pending.length + " remaining outputs") + " · estimate per output\n") + Omachroma.priceText(app.config, app.mode, app.store.prices, app.upscaleWidth, app.upscaleHeight, app.upscaleFactor, app.store.modelSpec, app.plan.pending.length)
+      costText: app.preview && app.preview.resultPath && !app.job.busy ? "Selected output · " + Omatinta.reportedCost(app.previewCost) : app.job.state !== "idle" && !app.job.busy && !app.preview ? Omatinta.reportedCost(app.job.cost) : (app.mode === "upscale" ? "Estimate\n" : (app.job.busy ? app.job.batchTotal + " queued outputs" : app.plan.pending.length + " remaining outputs") + " · estimate per output\n") + Omatinta.priceText(app.config, app.mode, app.store.prices, app.upscaleWidth, app.upscaleHeight, app.upscaleFactor, app.store.modelSpec, app.plan.pending.length)
       canPrimary: app.canPrimary
       busy: app.job.busy
       actionBusy: app.job.actionBusy || app.pickingImage || app.saver.busy || app.references.busy || app.store.ioBusy

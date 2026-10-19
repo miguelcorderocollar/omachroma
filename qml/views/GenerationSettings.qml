@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import qs.Commons
 import qs.Ui
-import "../logic/Omachroma.js" as Omachroma
+import "../logic/Omatinta.js" as Omatinta
 
 Column {
   id: root
@@ -17,7 +17,7 @@ Column {
   }
   Dropdown {
     width: parent.width; label: "Editing model"
-    options: Omachroma.editingOptions(root.store.editModels[root.store.config.provider || "fal"], root.store.config.res || "1K")
+    options: Omatinta.editingOptions(root.store.editModels[root.store.config.provider || "fal"], root.store.config.res || "1K")
     value: root.store.config.model || ""
     onChanged: root.store.update("model", value)
   }
@@ -46,13 +46,13 @@ Column {
     spacing: Style.spacing.md
     Dropdown {
       width: parent.width; label: "Upscaler"
-      options: Omachroma.upscalerOptions(root.store.upscaleOptions.filter(function(option) { return option.value !== "none" }), root.store.prices)
+      options: Omatinta.upscalerOptions(root.store.upscaleOptions.filter(function(option) { return option.value !== "none" }), root.store.prices)
       value: root.store.config.upscaler || "seedvr"
       onChanged: root.store.update("upscaler", value)
     }
     Dropdown {
       width: parent.width; label: "Upscale model"; visible: (root.store.upscaleSpec.models || []).length > 1
-      options: Omachroma.upscaleModelOptions(root.store.upscaleModels[root.store.config.upscaler], root.store.config.upscaler, root.store.prices)
+      options: Omatinta.upscaleModelOptions(root.store.upscaleModels[root.store.config.upscaler], root.store.config.upscaler, root.store.prices)
       value: root.store.config.upscaleModel || ""
       onChanged: root.store.update("upscaleModel", value)
     }

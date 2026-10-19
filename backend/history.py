@@ -1,4 +1,4 @@
-"""Durable, bounded Omachroma job metadata (never prompts or credentials)."""
+"""Durable, bounded Omatinta job metadata (never prompts or credentials)."""
 from datetime import datetime, timezone
 import hashlib
 import heapq

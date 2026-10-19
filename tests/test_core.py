@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Omachroma regression tests. No network, real credentials or billed requests."""
+"""Omatinta regression tests. No network, real credentials or billed requests."""
 import argparse
 import base64
 import contextlib
@@ -18,7 +18,7 @@ sys.path.insert(0, str(PLUGIN))
 from backend import jobs, providers, storage
 
 
-class OmachromaTests(unittest.TestCase):
+class OmatintaTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)

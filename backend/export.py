@@ -30,7 +30,7 @@ def copy_image(source, destination):
         return str(source)
     # Atomic export keeps the original and any existing destination intact
     # if copying or format conversion fails.
-    with tempfile.TemporaryDirectory(prefix='.omachroma-export-', dir=destination.parent) as temp:
+    with tempfile.TemporaryDirectory(prefix='.omatinta-export-', dir=destination.parent) as temp:
         staged = Path(temp) / ('image' + destination.suffix.lower())
         same_format = source.suffix.lower() == destination.suffix.lower() or (
             source.suffix.lower() in {'.jpg', '.jpeg'} and destination.suffix.lower() in {'.jpg', '.jpeg'})

@@ -134,7 +134,7 @@ Item {
   Process {
     id: loadProc
     stdout: StdioCollector { waitForEnd: true; onStreamFinished: root.accept(text) }
-    onExited: { if (exitCode !== 0) root.error = "Settings could not load. Check config.json in the Omachroma data folder." }
+    onExited: { if (exitCode !== 0) root.error = "Settings could not load. Check config.json in the Omatinta data folder." }
   }
   Process {
     id: saveProc

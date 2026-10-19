@@ -68,7 +68,7 @@ Item {
     closingFromHost = true; opened = false; window.visible = false; closingFromHost = false
   }
   function requestClose() {
-    if (shell && typeof shell.hide === "function") shell.hide("mikelon797.omachroma")
+    if (shell && typeof shell.hide === "function") shell.hide("mikelon797.omatinta")
     else close()
   }
   function localPath(path) {
@@ -230,7 +230,7 @@ Item {
   FloatingWindow {
     id: window
     visible: false
-    title: "Omachroma"
+    title: "Omatinta"
     implicitWidth: 760
     implicitHeight: 850
     minimumSize: Qt.size(580, 520)

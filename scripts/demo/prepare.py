@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build an isolated, network-guarded Omachroma QML demo profile."""
+"""Build an isolated, network-guarded Omatinta QML demo profile."""
 
 from __future__ import annotations
 
@@ -90,7 +90,7 @@ def prepare(args: argparse.Namespace) -> Path:
     pictures = home / "Pictures"
     pictures.mkdir(parents=True)
     (home / ".local" / "state" / "omarchy" / "current" / "theme").mkdir(parents=True)
-    (xdg_data / "omachroma" / "history" / "demo-saved-result").mkdir(parents=True)
+    (xdg_data / "omatinta" / "history" / "demo-saved-result").mkdir(parents=True)
     source_copy = copy_image(source, pictures / ("source" + source.suffix.lower()))
     result_copy = copy_image(result, pictures / ("result" + result.suffix.lower()))
     copied_references = []
@@ -109,7 +109,7 @@ def prepare(args: argparse.Namespace) -> Path:
 
     # Credentials are deliberately fake. The copied backend wrapper also blocks
     # every mutating/provider command, including --run and metadata refreshes.
-    data = xdg_data / "omachroma"
+    data = xdg_data / "omatinta"
     env_file = data / ".env"
     env_file.write_text(
         "FAL_KEY=DEMO-PLACEHOLDER-NOT-A-REAL-KEY\n"

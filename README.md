@@ -1,7 +1,7 @@
-<h1 align="center">Omachroma</h1>
+<h1 align="center">Omatinta</h1>
 
 <p align="center">
-  <img src="assets/omachroma.svg" width="76" alt="Omachroma Tokyo Night landscape O logo">
+  <img src="assets/omatinta.svg" width="76" alt="Omatinta Tokyo Night landscape O logo">
 </p>
 
 <p align="center">
@@ -9,35 +9,36 @@
   references, generate a batch across several themes, or upscale an existing image.
 </p>
 
-![Omachroma Generate view](preview.png)
+![Omatinta Generate view](preview.png)
 
-Omachroma is a community plugin for Omarchy's Quickshell shell. It uses fal.ai
+Omatinta is a community plugin for Omarchy's Quickshell shell. It uses fal.ai
 or OpenRouter for image editing; upscaling uses fal.ai. Bring your own provider
 keys. Generation and upscaling are paid provider operations.
 
 ## Install
 
-Install the public repository directly from Omarchy:
+The public repository is being prepared. The command below becomes available
+when the first public release is published.
 
 ```bash
-omarchy plugin add https://github.com/miguelcorderocollar/omachroma.git --enable
+omarchy plugin add https://github.com/miguelcorderocollar/omatinta.git --enable
 ```
 
 For a local checkout, link its root into the native plugin directory:
 
 ```bash
-ln -s /absolute/path/to/omachroma ~/.config/omarchy/plugins/mikelon797.omachroma
+ln -s /absolute/path/to/omatinta ~/.config/omarchy/plugins/mikelon797.omatinta
 omarchy-shell shell rescanPlugins
-omarchy plugin enable mikelon797.omachroma
+omarchy plugin enable mikelon797.omatinta
 ```
 
 Do not replace an existing plugin directory blindly. Validate the real checkout,
-not the symlink, with `omarchy plugin validate /absolute/path/to/omachroma`.
+not the symlink, with `omarchy plugin validate /absolute/path/to/omatinta`.
 
-Open **Omachroma** in the application launcher, or run:
+Open **Omatinta** in the application launcher, or run:
 
 ```bash
-omarchy-shell shell summon mikelon797.omachroma
+omarchy-shell shell summon mikelon797.omatinta
 ```
 
 ### Requirements
@@ -61,15 +62,15 @@ python3 generate-theme-wallpaper.py --doctor
 
 ### Optional floating-window rule
 
-Omachroma uses a normal application window so you can resize or tile it. The
+Omatinta uses a normal application window so you can resize or tile it. The
 class name of the QML window type does not force floating in Hyprland. To start
 it floating and opaque, add this rule to your user Hyprland bindings file:
 
 ```lua
-o.window({ title = "^Omachroma$" }, { tag = "+floating-window", opacity = "1 1" })
+o.window({ title = "^Omatinta$" }, { tag = "+floating-window", opacity = "1 1" })
 ```
 
-Reload with `hyprctl reload`, then check `hyprctl configerrors`. Omachroma does
+Reload with `hyprctl reload`, then check `hyprctl configerrors`. Omatinta does
 not edit your Hyprland configuration. On Omarchy, Super+T toggles floating and
 Super+W closes the window. Closing the window keeps the plugin loaded, so a
 running job can finish. Stop explicitly before disabling or removing the plugin.
@@ -148,14 +149,15 @@ are the billing record. See [pricing behavior](docs/pricing.md).
 
 ## Privacy and stored files
 
-Omachroma sends the selected images, references and generation prompt to the
+Omatinta sends the selected images, references and generation prompt to the
 chosen editing provider. Upscaling sends an image to fal.ai. Upload preparation
 removes image metadata. Provider retention and billing policies still apply.
 There is no plugin telemetry.
 
-New installations store data in `$XDG_DATA_HOME/omachroma`, normally
-`~/.local/share/omachroma`. Machines upgrading from OmaPaper continue using the
-existing `omapaper` directory so previous history/result paths stay valid.
+New installations store data in `$XDG_DATA_HOME/omatinta`, normally
+`~/.local/share/omatinta`. Machines upgrading from Omachroma or OmaPaper
+continue using the existing `omachroma` or `omapaper` directory so previous
+history/result paths stay valid.
 Settings displays the active data directory. Files include:
 
 - `.env`: saved provider keys, written atomically with mode 0600 through stdin.
@@ -177,24 +179,25 @@ until you remove it from the environment and restart the shell.
 
 Saved theme wallpapers use unique names under
 `~/.config/omarchy/backgrounds/<theme>/`. Existing wallpapers are preserved.
-Older OmaPaper wallpaper names and result files remain usable after upgrading.
+Older Omachroma (`01-omachroma-`) and OmaPaper (`01-omapaper-`) wallpaper names
+and result files remain usable after upgrading.
 
 ## Remove
 
 Stop any job first. Run the bundled removal helper from the installed plugin:
 
 ```bash
-bash ~/.config/omarchy/plugins/mikelon797.omachroma/uninstall.sh --yes
+bash ~/.config/omarchy/plugins/mikelon797.omatinta/uninstall.sh --yes
 ```
 
-It removes only Omachroma's managed launcher and asks the native plugin manager
+It removes only Omatinta's managed launcher and asks the native plugin manager
 to remove the plugin. Keys, configuration, history, results and theme wallpapers
 remain intact. A custom launcher or symlink at the launcher path is left alone.
 If you prefer native commands, remove the managed launcher before removing code:
 
 ```bash
-python3 ~/.config/omarchy/plugins/mikelon797.omachroma/generate-theme-wallpaper.py --remove-launcher
-omarchy plugin remove mikelon797.omachroma --yes
+python3 ~/.config/omarchy/plugins/mikelon797.omatinta/generate-theme-wallpaper.py --remove-launcher
+omarchy plugin remove mikelon797.omatinta --yes
 ```
 
 Native plugin removal alone does not clean up the registered launcher. For full
@@ -215,7 +218,7 @@ python3 generate-theme-wallpaper.py --list-themes
 Tests use temporary files and mocked providers. They make no paid API calls.
 See [design](DESIGN.md), [changelog](CHANGELOG.md) and the [release checklist](docs/releasing.md).
 
-MIT license. Copyright 2026 Miguel Cordero. Omachroma is maintained independently
+MIT license. Copyright 2026 Miguel Cordero. Omatinta is maintained independently
 and is not an official Omarchy plugin. README screenshots use an isolated profile showing a saved glaze wallpaper
 and its Ethereal result. The source/result are excluded from the reference
 strip; the visible references are distinct stock theme images. No generation

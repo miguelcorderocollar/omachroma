@@ -1,11 +1,11 @@
 [Desktop Entry]
 Type=Application
-Name=Omachroma
+Name=Omatinta
 Comment=Forge a wallpaper matched to your Omarchy theme
-Keywords=wallpaper;wallpapers;background;theme;upscale;liftoff;omachroma;
-Exec=omarchy-shell shell summon mikelon797.omachroma
+Keywords=wallpaper;wallpapers;background;theme;upscale;liftoff;omatinta;
+Exec=omarchy-shell shell summon mikelon797.omatinta
 Icon=@ICON@
 Terminal=false
 Categories=Graphics;Photography;
 StartupNotify=false
-X-Omachroma-Managed=true
+X-Omatinta-Managed=true

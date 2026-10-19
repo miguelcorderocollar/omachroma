@@ -38,7 +38,7 @@ def choose(method, title, *, multiple=False, source=None):
     kind = 'export' if method == 'SaveFile' else 'images'
     bus = Gio.bus_get_sync(Gio.BusType.SESSION, None)
     loop = GLib.MainLoop(); picked = []; answered = []
-    token = 'omachroma' + str(os.getpid())
+    token = 'omatinta' + str(os.getpid())
     sender = bus.get_unique_name()[1:].replace('.', '_')
     predicted = '/org/freedesktop/portal/desktop/request/' + sender + '/' + token
     def response(connection, sender_name, path, interface, signal, params):
@@ -56,7 +56,7 @@ def choose(method, title, *, multiple=False, source=None):
                'current_folder': GLib.Variant('ay', os.fsencode(folder(kind)) + b'\x00'),
                'filters': GLib.Variant('a(sa(us))', [('Images', patterns)])}
     if method == 'OpenFile': options['multiple'] = GLib.Variant('b', multiple)
-    else: options['current_name'] = GLib.Variant('s', 'omachroma-' + source.parent.name + source.suffix)
+    else: options['current_name'] = GLib.Variant('s', 'omatinta-' + source.parent.name + source.suffix)
     handle = bus.call_sync('org.freedesktop.portal.Desktop', '/org/freedesktop/portal/desktop',
         'org.freedesktop.portal.FileChooser', method, GLib.Variant('(ssa{sv})', ('', title, options)),
         None, Gio.DBusCallFlags.NONE, 15000, None).unpack()[0]

@@ -1,7 +1,7 @@
 import QtQuick
 import qs.Commons
 import qs.Ui
-import "../logic/Omachroma.js" as Omachroma
+import "../logic/Omatinta.js" as Omatinta
 
 Column {
   id: root
@@ -28,7 +28,7 @@ Column {
   }
   Dropdown {
     width: parent.width; label: "Editing model"
-    options: Omachroma.editingOptions(root.store.editModels[root.store.config.provider || "fal"], root.store.config.res || "1K")
+    options: Omatinta.editingOptions(root.store.editModels[root.store.config.provider || "fal"], root.store.config.res || "1K")
     value: root.store.config.model || ""; onChanged: root.store.update("model", value)
   }
   Flow {

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Omachroma history tests. No network calls, credentials or billed requests."""
+"""Omatinta history tests. No network calls, credentials or billed requests."""
 import argparse
 import contextlib
 import io
@@ -17,7 +17,7 @@ sys.path.insert(0, str(PLUGIN))
 from backend import history, jobs, storage, providers
 
 
-class OmachromaHistoryTests(unittest.TestCase):
+class OmatintaHistoryTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
