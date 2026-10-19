@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 
 RowLayout {
@@ -11,7 +12,7 @@ RowLayout {
   signal historyRequested()
   signal backRequested()
   function focusBack() { back.forceActiveFocus() }
-  spacing: Style.spacing.sm
+  spacing: Commons.Style.spacing.sm
   IconAction {
     id: back
     visible: root.settingsOpen || root.historyOpen
@@ -21,8 +22,8 @@ RowLayout {
   Text {
     Layout.fillWidth: true; textFormat: Text.PlainText
     text: root.settingsOpen ? "Omatinta / Settings" : root.historyOpen ? "Omatinta / History" : "Omatinta"
-    color: Color.menu.text; font.family: Style.font.family
-    font.pixelSize: Style.font.title; font.bold: true
+    color: Commons.Color.menu.text; font.family: Commons.Style.font.family
+    font.pixelSize: Commons.Style.font.title; font.bold: true
   }
   IconAction {
     visible: !root.settingsOpen && !root.historyOpen

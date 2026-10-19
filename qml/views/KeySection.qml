@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 
 Column {
@@ -12,31 +13,31 @@ Column {
   property bool environmentKey: false
   signal saveRequested(string provider, string key)
   signal removeRequested(string provider)
-  spacing: Style.spacing.sm
+  spacing: Commons.Style.spacing.sm
   function focusField() { keyField.forceActiveFocus() }
   Row {
-    spacing: Style.spacing.sm
+    spacing: Commons.Style.spacing.sm
     Text {
       text: root.label
-      color: Color.menu.text
-      font.family: Style.font.family; font.pixelSize: Style.font.bodySmall
+      color: Commons.Color.menu.text
+      font.family: Commons.Style.font.family; font.pixelSize: Commons.Style.font.bodySmall
     }
     Text {
       visible: root.hasKey
       text: "✓"
-      color: Color.pick("omatinta.success", "mediumseagreen")
-      font.family: Style.font.family; font.pixelSize: Style.font.bodySmall
+      color: Commons.Color.pick("omatinta.success", "mediumseagreen")
+      font.family: Commons.Style.font.family; font.pixelSize: Commons.Style.font.bodySmall
       Accessible.name: root.label + " API key saved"
     }
   }
   RowLayout {
-    width: parent.width; spacing: Style.spacing.sm
+    width: parent.width; spacing: Commons.Style.spacing.sm
     TextField {
       id: keyField
       Layout.fillWidth: true
       password: true
       enabled: !root.locked
-      foreground: Color.menu.text
+      foreground: Commons.Color.menu.text
       placeholderText: root.hasKey ? "••••••••••••" : "Paste " + root.label + " key"
       Accessible.name: root.hasKey ? root.label + " saved API key, masked. Type to replace." : root.label + " API key"
       onAccepted: { root.saveRequested(root.provider, text); clear() }
@@ -54,7 +55,7 @@ Column {
     }
     IconAction {
       iconText: "󰆴"; tooltipText: "Remove saved " + root.label + " key"
-      hoverColor: Color.urgent
+      hoverColor: Commons.Color.urgent
       Layout.preferredHeight: keyField.implicitHeight; Layout.preferredWidth: keyField.implicitHeight
       enabled: root.hasKey && !root.locked
       onClicked: root.removeRequested(root.provider)
@@ -64,6 +65,6 @@ Column {
     visible: root.environmentKey
     width: parent.width; wrapMode: Text.WordWrap; textFormat: Text.PlainText
     text: "An environment key is active. Removing the saved key does not remove it."
-    color: Color.muted; font.family: Style.font.family; font.pixelSize: Style.font.bodySmall
+    color: Commons.Color.muted; font.family: Commons.Style.font.family; font.pixelSize: Commons.Style.font.bodySmall
   }
 }

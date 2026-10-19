@@ -1,20 +1,21 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 
 // Upscale mode: existing image + optional theme install + factor.
 // Data in via properties, actions out via signals; Panel.qml owns state.
 Column {
   id: root
-  spacing: Style.spacing.md
+  spacing: Commons.Style.spacing.md
 
   property string upscalePath: ""
   property string upscaleTheme: ""
   property var themes: []
   property int upscaleFactor: 2
   property var factorOptions: [2, 4]
-  property color foreground: Color.menu.text
+  property color foreground: Commons.Color.menu.text
 
   signal pathEdited(string path)
   signal browseRequested()
@@ -33,7 +34,7 @@ Column {
       id: upscaleField
       anchors.left: parent.left
       anchors.right: upscaleBrowseButton.left
-      anchors.rightMargin: Style.spacing.controlGap
+      anchors.rightMargin: Commons.Style.spacing.controlGap
       anchors.verticalCenter: parent.verticalCenter
       foreground: root.foreground
       placeholderText: "Type an image path, like ~/Pictures/photo.jpg"
@@ -56,11 +57,11 @@ Column {
   }
   BorderSurface {
     visible: root.upscalePath !== ""
-    width: Style.space(88)
-    height: Style.space(56)
-    radius: Style.cornerRadius
+    width: Commons.Style.space(88)
+    height: Commons.Style.space(56)
+    radius: Commons.Style.cornerRadius
     color: "transparent"
-    borderSpec: Border.controlSpec("normal", root.foreground, Color.accent)
+    borderSpec: Commons.Border.controlSpec("normal", root.foreground, Commons.Color.accent)
     Image {
       anchors.fill: parent
       anchors.margins: 2

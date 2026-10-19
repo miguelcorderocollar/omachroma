@@ -3,6 +3,7 @@ import QtQuick.Window
 import QtQuick.Controls as QQC
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 import "../logic/Omatinta.js" as Omatinta
 import "../logic/Focus.js" as Focus
@@ -38,13 +39,13 @@ FocusScope {
   }
   Connections { target: root.app.store; function onIoBusyChanged() { if (root.app.store.ioBusy) Focus.closePopups(root) } }
   WorkspaceShortcuts { app: root.app; settings: settings; modalOpen: root.modalOpen; onBackRequested: root.goBack() }
-  Rectangle { anchors.fill: parent; color: Qt.rgba(Color.menu.background.r, Color.menu.background.g, Color.menu.background.b, 1) }
+  Rectangle { anchors.fill: parent; color: Qt.rgba(Commons.Color.menu.background.r, Commons.Color.menu.background.g, Commons.Color.menu.background.b, 1) }
   ColumnLayout {
     id: mainColumn
     enabled: !root.modalOpen
     anchors.fill: parent
-    anchors.margins: Style.spacing.panelPadding
-    spacing: Style.spacing.md
+    anchors.margins: Commons.Style.spacing.panelPadding
+    spacing: Commons.Style.spacing.md
     AppHeader {
       id: header
       Layout.fillWidth: true
@@ -72,7 +73,7 @@ FocusScope {
       }
       Item { Layout.fillWidth: true }
     }
-    PanelSeparator { Layout.fillWidth: true; foreground: Color.menu.text }
+    PanelSeparator { Layout.fillWidth: true; foreground: Commons.Color.menu.text }
     QQC.ScrollView {
       id: scroll
       Layout.fillWidth: true
@@ -82,7 +83,7 @@ FocusScope {
       Column {
         id: contentColumn
         width: scroll.availableWidth
-        spacing: Style.spacing.lg
+        spacing: Commons.Style.spacing.lg
         GenerateForm {
           visible: app.mode === "generate" && !app.settingsOpen && !app.historyOpen
           width: parent.width
@@ -158,7 +159,7 @@ FocusScope {
         }
       }
     }
-    PanelSeparator { Layout.fillWidth: true; foreground: Color.menu.text }
+    PanelSeparator { Layout.fillWidth: true; foreground: Commons.Color.menu.text }
     FooterBar {
       visible: !app.settingsOpen && !app.historyOpen
       Layout.fillWidth: true
@@ -180,7 +181,7 @@ FocusScope {
     id: costDetails; title: "Reported cost"; anchors.fill: parent; z: 11
     onClosed: { if (!restoredFocus) Qt.callLater(root.focusNavigation) }
     property string details: ""
-    Text { anchors.fill: parent; textFormat: Text.PlainText; text: costDetails.details; wrapMode: Text.WordWrap; color: Color.menu.text; font.family: Style.font.family; font.pixelSize: Style.font.body }
+    Text { anchors.fill: parent; textFormat: Text.PlainText; text: costDetails.details; wrapMode: Text.WordWrap; color: Commons.Color.menu.text; font.family: Commons.Style.font.family; font.pixelSize: Commons.Style.font.body }
   }
   ImageLightbox {
     id: lightbox

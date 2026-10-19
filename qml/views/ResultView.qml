@@ -2,17 +2,18 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 
 // Status lives in the footer; this view owns the retained preview only.
 Column {
   id: root
-  spacing: Style.spacing.md
+  spacing: Commons.Style.spacing.md
 
   property string resultPath: ""
   property bool busy: false
   property string installedPath: ""
-  property color foreground: Color.menu.text
+  property color foreground: Commons.Color.menu.text
   signal previewRequested(string path)
   signal folderRequested()
 
@@ -23,7 +24,7 @@ Column {
   }
   CursorSurface {
     id: thumbnail
-    width: Style.space(256); height: Style.space(144)
+    width: Commons.Style.space(256); height: Commons.Style.space(144)
     foreground: root.foreground; hasCursor: hover.hovered || activeFocus
     activeFocusOnTab: true
     Accessible.role: Accessible.Button
@@ -31,7 +32,7 @@ Column {
     Accessible.onPressAction: thumbnail.activate()
     function activate() { forceActiveFocus(); root.previewRequested(root.resultPath) }
     Image {
-      anchors.fill: parent; anchors.margins: Style.space(2)
+      anchors.fill: parent; anchors.margins: Commons.Style.space(2)
       source: root.resultPath !== "" ? "file://" + root.resultPath : ""
       asynchronous: true; sourceSize.width: 768; fillMode: Image.PreserveAspectFit
       Accessible.name: "Result thumbnail"
@@ -48,7 +49,7 @@ Column {
     Text {
       Layout.fillWidth: true; wrapMode: Text.WrapAnywhere; textFormat: Text.PlainText
       text: (root.installedPath || root.resultPath).replace(Quickshell.env("HOME"), "~")
-      color: Color.muted; font.family: Style.font.family; font.pixelSize: Style.font.caption
+      color: Commons.Color.muted; font.family: Commons.Style.font.family; font.pixelSize: Commons.Style.font.caption
     }
     IconAction {
       focusable: true; iconText: "󰉋"; tooltipText: "Open saved folder"

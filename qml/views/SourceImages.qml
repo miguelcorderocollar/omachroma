@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 
 Column {
@@ -9,7 +10,7 @@ Column {
   signal added(string path)
   signal removed(string path)
   signal browseRequested()
-  spacing: Style.spacing.sm
+  spacing: Commons.Style.spacing.sm
   function addPath() {
     if (!pathField.text.trim()) return
     root.added(pathField.text.trim()); pathField.clear()
@@ -20,9 +21,9 @@ Column {
 
   }
   RowLayout {
-    width: parent.width; spacing: Style.spacing.controlGap
+    width: parent.width; spacing: Commons.Style.spacing.controlGap
     TextField {
-      id: pathField; Layout.fillWidth: true; foreground: Color.menu.text
+      id: pathField; Layout.fillWidth: true; foreground: Commons.Color.menu.text
       placeholderText: "Paste an image path, then press Enter"
       Accessible.name: "Add source image path"
       onAccepted: root.addPath()
@@ -42,18 +43,18 @@ Column {
     }
   }
   Flow {
-    width: parent.width; spacing: Style.spacing.sm
+    width: parent.width; spacing: Commons.Style.spacing.sm
     Repeater {
       model: root.paths
       BorderSurface {
         id: thumbnail
         required property string modelData
         required property int index
-        width: Style.space(88); height: Style.space(56)
-        color: "transparent"; radius: Style.cornerRadius
-        borderSpec: Border.controlSpec("normal", Color.menu.text, Color.accent)
+        width: Commons.Style.space(88); height: Commons.Style.space(56)
+        color: "transparent"; radius: Commons.Style.cornerRadius
+        borderSpec: Commons.Border.controlSpec("normal", Commons.Color.menu.text, Commons.Color.accent)
         Image {
-          anchors.fill: parent; anchors.margins: Style.space(2)
+          anchors.fill: parent; anchors.margins: Commons.Style.space(2)
           source: "file://" + thumbnail.modelData
           asynchronous: true; sourceSize.width: 176
           fillMode: Image.PreserveAspectCrop
@@ -62,7 +63,7 @@ Column {
         BorderSurface {
           anchors.right: parent.right; anchors.top: parent.top
           width: removeButton.width; height: removeButton.height
-          color: Color.menu.background; radius: Style.cornerRadius
+          color: Commons.Color.menu.background; radius: Commons.Style.cornerRadius
           PanelActionButton {
             id: removeButton; focusable: true; iconText: "×"
             tooltipText: "Remove " + thumbnail.modelData.split("/").pop()
@@ -73,8 +74,8 @@ Column {
         Rectangle {
           visible: root.paths.length > 1
           anchors.left: parent.left; anchors.bottom: parent.bottom
-          width: Style.space(16); height: width; color: Color.menu.background
-          Text { anchors.centerIn: parent; text: thumbnail.index + 1; color: Color.menu.text; font.family: Style.font.family; font.pixelSize: Style.font.caption }
+          width: Commons.Style.space(16); height: width; color: Commons.Color.menu.background
+          Text { anchors.centerIn: parent; text: thumbnail.index + 1; color: Commons.Color.menu.text; font.family: Commons.Style.font.family; font.pixelSize: Commons.Style.font.caption }
         }
         HoverHandler { id: hover }
         PanelToolTip { visible: hover.hovered; text: thumbnail.modelData }

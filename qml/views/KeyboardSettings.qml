@@ -1,9 +1,10 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 
 Column {
-  spacing: Style.spacing.md
+  spacing: Commons.Style.spacing.md
   Repeater {
     model: [
       ["Tab / Shift+Tab", "Move between controls"], ["Enter / Space", "Activate a focused button or reference"],
@@ -15,9 +16,9 @@ Column {
       ["Ctrl+Delete", "Clear selection"], ["Ctrl+.", "Stop local work"]
     ]
     RowLayout {
-      width: parent.width; spacing: Style.spacing.md
-      Text { Layout.preferredWidth: Style.space(230); textFormat: Text.PlainText; text: modelData[0]; color: Color.menu.text; font.family: Style.font.family; font.pixelSize: Style.font.bodySmall }
-      Text { Layout.fillWidth: true; wrapMode: Text.WordWrap; textFormat: Text.PlainText; text: modelData[1]; color: Color.muted; font.family: Style.font.family; font.pixelSize: Style.font.bodySmall }
+      width: parent.width; spacing: Commons.Style.spacing.md
+      Text { Layout.preferredWidth: Commons.Style.space(230); textFormat: Text.PlainText; text: modelData[0]; color: Commons.Color.menu.text; font.family: Commons.Style.font.family; font.pixelSize: Commons.Style.font.bodySmall }
+      Text { Layout.fillWidth: true; wrapMode: Text.WordWrap; textFormat: Text.PlainText; text: modelData[1]; color: Commons.Color.muted; font.family: Commons.Style.font.family; font.pixelSize: Commons.Style.font.bodySmall }
     }
   }
 }

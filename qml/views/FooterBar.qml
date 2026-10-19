@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 
 ColumnLayout {
@@ -15,7 +16,7 @@ ColumnLayout {
   signal primaryClicked()
   signal clearClicked()
   signal cancelClicked()
-  spacing: Style.spacing.sm
+  spacing: Commons.Style.spacing.sm
   RowLayout {
     visible: root.lastError !== "" || root.busy || root.actionBusy && root.footText !== ""
     Layout.fillWidth: true
@@ -23,13 +24,13 @@ ColumnLayout {
     Text {
       Layout.fillWidth: true; textFormat: Text.PlainText; wrapMode: Text.WordWrap
       text: root.lastError || root.footText
-      color: root.lastError ? Color.urgent : Color.menu.text
-      font.family: Style.font.family; font.pixelSize: Style.font.bodySmall
+      color: root.lastError ? Commons.Color.urgent : Commons.Color.menu.text
+      font.family: Commons.Style.font.family; font.pixelSize: Commons.Style.font.bodySmall
       Accessible.role: Accessible.StaticText
     }
   }
   RowLayout {
-    Layout.fillWidth: true; spacing: Style.spacing.controlGap
+    Layout.fillWidth: true; spacing: Commons.Style.spacing.controlGap
     ActionButton {
       text: "Clear"; enabled: !root.busy && !root.actionBusy
       tooltipText: "Clear selection · Ctrl+Delete"

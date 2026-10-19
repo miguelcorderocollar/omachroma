@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.Commons
+import qs.Commons as Commons
 import "controllers"
 import "views"
 import "logic/BatchPlan.js" as Planning
@@ -235,7 +236,7 @@ Item {
     implicitHeight: 850
     minimumSize: Qt.size(580, 520)
     // Clear the complete native buffer with the theme color on every frame.
-    color: Qt.rgba(Color.menu.background.r, Color.menu.background.g, Color.menu.background.b, 1)
+    color: Qt.rgba(Commons.Color.menu.background.r, Commons.Color.menu.background.g, Commons.Color.menu.background.b, 1)
     surfaceFormat.opaque: true
     onVisibleChanged: {
       root.opened = visible

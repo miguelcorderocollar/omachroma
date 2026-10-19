@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls as QQC
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 
 // Generate mode: source picker + preview, theme + swatches, style-ref grid,
@@ -9,7 +10,7 @@ import qs.Ui
 // handled by Panel.qml. Theme tokens come straight from the singletons.
 Column {
   id: root
-  spacing: Style.spacing.md
+  spacing: Commons.Style.spacing.md
 
   property var sourcePaths: []
   property string theme: ""
@@ -22,7 +23,7 @@ Column {
   property int referenceLimit: 4
   property var swatches: []
   property int copiedSwatchIndex: -1
-  property color foreground: Color.menu.text
+  property color foreground: Commons.Color.menu.text
   property string promptText: ""
   signal sourceAdded(string path)
   signal sourceRemoved(string path)
@@ -67,10 +68,10 @@ Column {
   RowLayout {
     width: parent.width
     visible: root.swatches.length > 0
-    spacing: Style.spacing.sm
+    spacing: Commons.Style.spacing.sm
     Flow {
       Layout.fillWidth: true
-      spacing: Style.spacing.sm
+      spacing: Commons.Style.spacing.sm
       Repeater {
         model: root.swatches
         ColorSwatch {
@@ -83,8 +84,8 @@ Column {
     Text {
       text: "Copied"
       opacity: root.copiedSwatchIndex >= 0 ? 1 : 0
-      color: Color.menu.text
-      font.family: Style.font.family; font.pixelSize: Style.font.caption
+      color: Commons.Color.menu.text
+      font.family: Commons.Style.font.family; font.pixelSize: Commons.Style.font.caption
       Accessible.name: root.copiedSwatchIndex >= 0 ? "Color copied to clipboard" : ""
     }
   }
@@ -92,20 +93,20 @@ Column {
     visible: root.targetThemes.length > 0
     text: "Style references · " + root.pickedRefs.length + "/" + root.referenceLimit
     color: Qt.darker(root.foreground, 1.4)
-    font.family: Style.font.family
-    font.pixelSize: Style.font.caption
+    font.family: Commons.Style.font.family
+    font.pixelSize: Commons.Style.font.caption
     font.bold: true
   }
   ActionButton { visible: root.targetThemes.length > 0; text: "Add custom reference…"; focusable: true; bordered: true; onClicked: root.customRefRequested() }
   Flow {
     visible: root.targetThemes.length > 0
     width: parent.width
-    spacing: Style.spacing.sm
+    spacing: Commons.Style.spacing.sm
     Repeater {
       model: root.backgrounds
       Item {
-        width: Style.space(88)
-        height: Style.space(56)
+        width: Commons.Style.space(88)
+        height: Commons.Style.space(56)
         activeFocusOnTab: true
         Accessible.role: Accessible.CheckBox
         Accessible.name: modelData.name
@@ -114,9 +115,9 @@ Column {
         property bool picked: root.pickedRefs.indexOf(modelData.path) >= 0
         BorderSurface {
           anchors.fill: parent
-          radius: Style.cornerRadius
+          radius: Commons.Style.cornerRadius
           color: "transparent"
-          borderSpec: Border.controlSpec(parent.activeFocus ? "focus" : parent.picked ? "selected" : "normal", root.foreground, Color.accent)
+          borderSpec: Commons.Border.controlSpec(parent.activeFocus ? "focus" : parent.picked ? "selected" : "normal", root.foreground, Commons.Color.accent)
           Image {
             anchors.fill: parent
             anchors.margins: 2
@@ -129,19 +130,19 @@ Column {
         }
         Rectangle {
           visible: parent.picked
-          width: Style.space(18)
-          height: Style.space(18)
+          width: Commons.Style.space(18)
+          height: Commons.Style.space(18)
           radius: width / 2
           anchors.top: parent.top
           anchors.right: parent.right
-          anchors.margins: Style.space(3)
-          color: Color.accent
+          anchors.margins: Commons.Style.space(3)
+          color: Commons.Color.accent
           Text {
             anchors.centerIn: parent
             text: "✓"
-            color: Color.menu.background
+            color: Commons.Color.menu.background
             font.bold: true
-            font.pixelSize: Style.font.caption
+            font.pixelSize: Commons.Style.font.caption
           }
         }
         MouseArea {

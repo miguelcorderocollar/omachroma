@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls as QQC
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 QQC.ScrollView {
   id: root
@@ -10,25 +11,25 @@ QQC.ScrollView {
   property alias text: area.text
   signal edited(string value)
   contentWidth: availableWidth
-  height: Math.ceil(metrics.lineSpacing * 4) + Style.spacing.inputPaddingY * 2
+  height: Math.ceil(metrics.lineSpacing * 4) + Commons.Style.spacing.inputPaddingY * 2
   clip: true
-  FontMetrics { id: metrics; font.family: Style.font.family; font.pixelSize: Style.font.body }
+  FontMetrics { id: metrics; font.family: Commons.Style.font.family; font.pixelSize: Commons.Style.font.body }
   QQC.TextArea {
     id: area
     width: root.availableWidth
     text: root.value; wrapMode: Text.Wrap
     onTextChanged: { if (activeFocus) root.edited(text) }
-    color: Color.menu.text; selectionColor: Color.accent; selectedTextColor: Color.menu.background
-    font.family: Style.font.family; font.pixelSize: Style.font.body
+    color: Commons.Color.menu.text; selectionColor: Commons.Color.accent; selectedTextColor: Commons.Color.menu.background
+    font.family: Commons.Style.font.family; font.pixelSize: Commons.Style.font.body
     placeholderText: root.placeholder
     Accessible.name: root.label
-    topPadding: Style.spacing.inputPaddingY; bottomPadding: Style.spacing.inputPaddingY
-    leftPadding: Style.spacing.controlPaddingX; rightPadding: Style.spacing.controlPaddingX
+    topPadding: Commons.Style.spacing.inputPaddingY; bottomPadding: Commons.Style.spacing.inputPaddingY
+    leftPadding: Commons.Style.spacing.controlPaddingX; rightPadding: Commons.Style.spacing.controlPaddingX
     background: null
   }
   background: BorderSurface {
-    color: Style.controlFill(area.activeFocus, area.hovered, Color.menu.text, Color.accent)
-    borderSpec: Border.controlSpec(area.activeFocus ? "focus" : "normal", Color.menu.text, Color.accent)
-    radius: Style.cornerRadius
+    color: Commons.Style.controlFill(area.activeFocus, area.hovered, Commons.Color.menu.text, Commons.Color.accent)
+    borderSpec: Commons.Border.controlSpec(area.activeFocus ? "focus" : "normal", Commons.Color.menu.text, Commons.Color.accent)
+    radius: Commons.Style.cornerRadius
   }
 }

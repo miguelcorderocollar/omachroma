@@ -1,5 +1,6 @@
 import QtQuick
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 import "../logic/Omatinta.js" as Omatinta
 
@@ -7,7 +8,7 @@ Column {
   id: root
   required property var store
   signal configureRequested()
-  spacing: Style.spacing.md
+  spacing: Commons.Style.spacing.md
   function changeModel(action) {
     var next = JSON.parse(JSON.stringify(store.modelConfig))
     var provider = store.config.provider || "fal", model = store.config.model
@@ -32,14 +33,14 @@ Column {
     value: root.store.config.model || ""; onChanged: root.store.update("model", value)
   }
   Flow {
-    width: parent.width; spacing: Style.spacing.sm
+    width: parent.width; spacing: Commons.Style.spacing.sm
     ActionButton { text: "Set default"; onClicked: root.changeModel("default") }
     ActionButton { text: "Hide model"; enabled: (root.store.editModels[root.store.config.provider || "fal"] || []).length > 1; onClicked: root.changeModel("hide") }
     ActionButton { text: "Show hidden"; onClicked: root.changeModel("show") }
   }
   PanelSeparator { width: parent.width }
   Flow {
-    width: parent.width; spacing: Style.spacing.sm
+    width: parent.width; spacing: Commons.Style.spacing.sm
     ActionButton {
       text: "Refresh prices"; iconText: "󰑐"
       tooltipText: root.store.message || "Refresh known models; keep cached rates if offline"
@@ -50,12 +51,12 @@ Column {
   Text {
     width: parent.width; textFormat: Text.PlainText; wrapMode: Text.WordWrap
     text: "Rates: " + (root.store.modelSpec.priceChecked || root.store.prices.checked || "not checked")
-    color: Color.muted; font.family: Style.font.family; font.pixelSize: Style.font.caption
+    color: Commons.Color.muted; font.family: Commons.Style.font.family; font.pixelSize: Commons.Style.font.caption
   }
   Text {
     visible: root.store.catalogWarning !== "" || root.store.refreshWarning !== ""
     width: parent.width; wrapMode: Text.WordWrap; textFormat: Text.PlainText
     text: root.store.catalogWarning || root.store.refreshWarning
-    color: Color.urgent; font.family: Style.font.family; font.pixelSize: Style.font.bodySmall
+    color: Commons.Color.urgent; font.family: Commons.Style.font.family; font.pixelSize: Commons.Style.font.bodySmall
   }
 }

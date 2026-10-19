@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 Column {
   id: root
@@ -10,7 +11,7 @@ Column {
   signal selected(string key)
   signal saveRemaining()
   signal regenerate()
-  spacing: Style.spacing.sm
+  spacing: Commons.Style.spacing.sm
   Dropdown {
     width: parent.width; label: "Output"
     options: root.plan.options.concat(root.external ? [{value: "history:" + root.external.id, label: (root.external.name || "Wallpaper") + " · " + root.external.theme + " · History"}] : [])
@@ -37,6 +38,6 @@ Column {
     visible: !root.external && !!(root.plan.selected && root.plan.selected.error)
     width: parent.width; wrapMode: Text.WordWrap; textFormat: Text.PlainText
     text: root.plan.selected && root.plan.selected.error || ""
-    color: Color.urgent; font.family: Style.font.family; font.pixelSize: Style.font.bodySmall
+    color: Commons.Color.urgent; font.family: Commons.Style.font.family; font.pixelSize: Commons.Style.font.bodySmall
   }
 }

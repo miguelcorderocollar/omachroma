@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 
 RowLayout {
@@ -12,7 +13,7 @@ RowLayout {
   signal saveRequested()
   signal themeRequested()
   signal costRequested()
-  spacing: Style.spacing.controlGap
+  spacing: Commons.Style.spacing.controlGap
   ActionButton {
     text: "Save as…"; enabled: root.canSet
     tooltipText: "Export a copy · Ctrl+S"

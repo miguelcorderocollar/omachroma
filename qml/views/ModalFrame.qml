@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 
 FocusScope {
@@ -38,20 +39,20 @@ FocusScope {
   Shortcut { sequence: "Escape"; enabled: root.opened; onActivated: root.close() }
   Rectangle {
     anchors.fill: parent
-    color: Qt.rgba(Color.menu.background.r, Color.menu.background.g, Color.menu.background.b, 0.9)
+    color: Qt.rgba(Commons.Color.menu.background.r, Commons.Color.menu.background.g, Commons.Color.menu.background.b, 0.9)
     MouseArea { anchors.fill: parent; onClicked: root.close() }
   }
   BorderSurface {
     anchors.centerIn: parent
-    width: Math.max(1, Math.min(Style.space(960), root.width - Style.spacing.panelPadding * 2))
-    height: Math.max(1, Math.min(Style.space(640), root.height - Style.spacing.panelPadding * 2))
-    color: Color.menu.background; radius: Style.cornerRadius
-    borderSpec: Border.controlSpec("normal", Color.menu.text, Color.accent)
+    width: Math.max(1, Math.min(Commons.Style.space(960), root.width - Commons.Style.spacing.panelPadding * 2))
+    height: Math.max(1, Math.min(Commons.Style.space(640), root.height - Commons.Style.spacing.panelPadding * 2))
+    color: Commons.Color.menu.background; radius: Commons.Style.cornerRadius
+    borderSpec: Commons.Border.controlSpec("normal", Commons.Color.menu.text, Commons.Color.accent)
     Accessible.role: Accessible.Dialog; Accessible.name: root.title
     MouseArea { anchors.fill: parent; onClicked: {} }
     ColumnLayout {
-      anchors.fill: parent; anchors.margins: Style.spacing.panelPadding
-      spacing: Style.spacing.md
+      anchors.fill: parent; anchors.margins: Commons.Style.spacing.panelPadding
+      spacing: Commons.Style.spacing.md
       RowLayout {
         Layout.fillWidth: true
         PanelSectionHeader { Layout.fillWidth: true; text: root.title }

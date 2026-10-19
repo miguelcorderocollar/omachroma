@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 import "../logic/Omatinta.js" as Omatinta
 
@@ -8,7 +9,7 @@ Column {
   id: root
   required property var store
   signal usePromptRequested()
-  spacing: Style.spacing.md
+  spacing: Commons.Style.spacing.md
   Dropdown {
     width: parent.width; label: "Provider"
     options: [{value:"fal",label:"fal.ai"},{value:"openrouter",label:"OpenRouter"}]
@@ -43,7 +44,7 @@ Column {
   }
   Column {
     width: parent.width; visible: root.store.upscalingEnabled
-    spacing: Style.spacing.md
+    spacing: Commons.Style.spacing.md
     Dropdown {
       width: parent.width; label: "Upscaler"
       options: Omatinta.upscalerOptions(root.store.upscaleOptions.filter(function(option) { return option.value !== "none" }), root.store.prices)
@@ -73,7 +74,7 @@ Column {
   PanelSectionHeader { text: "Default prompt" }
   PromptInput { id: prompt; width: parent.width; value: root.store.config.prompt || ""; label: "Default generation prompt" }
   RowLayout {
-    width: parent.width; spacing: Style.spacing.sm
+    width: parent.width; spacing: Commons.Style.spacing.sm
     ActionButton { iconText: "󰆓"; text: "Save prompt"; onClicked: root.store.update("prompt", prompt.text) }
     ActionButton { text: "Use in Generate"; onClicked: root.usePromptRequested() }
     Item { Layout.fillWidth: true }
