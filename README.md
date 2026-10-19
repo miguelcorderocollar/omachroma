@@ -17,9 +17,6 @@ keys. Generation and upscaling are paid provider operations.
 
 ## Install
 
-The public repository is being prepared. The command below becomes available
-when the first public release is published.
-
 ```bash
 omarchy plugin add https://github.com/miguelcorderocollar/omatinta.git --enable
 ```

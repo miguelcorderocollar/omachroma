@@ -1,9 +1,9 @@
 # Release checklist
 
-This repository is a locally prepared release candidate under the Omatinta
-name (formerly Omachroma). No public repository, tagged release or
-marketplace listing has been created yet under the new name. CI/CD remains
-intentionally out of scope.
+The standalone repository is public at https://github.com/miguelcorderocollar/omatinta
+(renamed from Omachroma; the old URL redirects). The `main` branch can be installed
+directly using the README command. No tagged release or marketplace listing has been
+created yet. CI/CD remains intentionally out of scope.
 
 ## Before the first tagged beta
 
